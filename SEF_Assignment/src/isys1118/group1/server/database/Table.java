@@ -47,6 +47,20 @@ public class Table
         }
     }
     
+    protected Table(String[] names, String[] types) throws Exception {
+    	if (names.length != types.length || names.length <= 0) {
+    		throw new Exception("Failed to create table: problem with table header");
+    	}
+    	numColumns = names.length;
+    	columnNames = new ArrayList<String>(numColumns);
+    	columnTypes = new ArrayList<String>(numColumns);
+    	rows = new ArrayList<Row>();
+    	for (int i = 0; i < names.length; i++) {
+    		columnNames.add(names[i]);
+    		columnTypes.add(types[i]);
+    	}
+    }
+    
     /**
      * Checks if all data given in the ArrayList fits the data table.
      * @param data
@@ -155,7 +169,8 @@ public class Table
         }
         // String
         else if (
-                type.toUpperCase().equals("VARCHAR"))
+                type.toUpperCase().equals("VARCHAR") ||
+                type.toUpperCase().equals("STRING"))
         {
             return String.class;
         }
@@ -205,6 +220,87 @@ public class Table
     }
     
     /**
+     * <p>Gets the type of an object at column {@code index}. Currently only
+     * supports:</p>
+     * <ul>
+     *     <li>INTEGER / INT</li>
+     *     <li>SMALLINT</li>
+     *     <li>VARCHAR</li>
+     *     <li>BOOLEAN</li>
+     *     <li>DECIMAL / DEC</li>
+     *     <li>FLOAT</li>
+     *     <li>NUMERIC</li>
+     *     <li>CHARACTER / CHAR</li>
+     * </ul>
+     * 
+     * @param index of column
+     * @return A String object representing the correct Java class of
+     * the data type. Use this object to cast using {@link Class#cast(Object)}.
+     */
+    public String getTypeName(int index)
+    {
+        String type = columnTypes.get(index);
+        // Integer
+        if (
+                type.toUpperCase().equals("INTEGER") ||
+                type.toUpperCase().equals("INT") ||
+                type.toUpperCase().equals("SMALLINT"))
+        {
+            return "INTEGER";
+        }
+        // String
+        else if (
+                type.toUpperCase().equals("VARCHAR") ||
+                type.toUpperCase().equals("STRING"))
+        {
+            return "STRING";
+        }
+        // Boolean
+        else if (
+                type.toUpperCase().equals("BOOLEAN"))
+        {
+            return "BOOLEAN";
+        }
+        // Double
+        else if (
+                type.toUpperCase().equals("DECIMAL") ||
+                type.toUpperCase().equals("DEC") ||
+                type.toUpperCase().equals("FLOAT") ||
+                type.toUpperCase().equals("NUMERIC"))
+        {
+            return "DOUBLE";
+        }
+        // Character
+        else if (
+                type.toUpperCase().equals("CHARACTER") ||
+                type.toUpperCase().equals("CHAR"))
+        {
+            return "CHAR";
+        }
+        else
+        {
+            // TODO create DB Error
+            throw new Error("Type not supported.");
+        }
+    }
+    
+    /**
+     * Gets a data type using a given column name. See {@link #getType(int)}.
+     * @param columnName
+     * @return See {@link #getType(int)}.
+     */
+    public String getTypeName(String columnName)
+    {
+        int index = getColumnIndex(columnName);
+        if (index < 0)
+        {
+            // TODO create DB Error
+            throw new Error("No column exists with name: " + columnName);
+        }
+        return getTypeName(index);
+    }
+    
+    /**
      * Gets the index of the column with the given column name.
      * @param columnName
      * @return
@@ -222,7 +318,22 @@ public class Table
      * @param data
      * @return
      */
-    public Row createNewRow(ArrayList<Object> data)
+    public Row createNewRow(ArrayList<String> data)
+    {
+        Row r = new Row(this, data);
+        rows.add(r);
+        return r;
+    }
+    
+    /**
+     * <p>Creates a new row for this table. The Row is linked to the table and
+     * must comply to the table's schema.</p>
+     * <p>All changes made to the new row will be updated to the database
+     * once the table is committed.</p>
+     * @param data
+     * @return
+     */
+    public Row createNewRow(String[] data)
     {
         Row r = new Row(this, data);
         rows.add(r);
@@ -255,9 +366,10 @@ public class Table
      * @param query
      * @return
      */
+    @Deprecated
     public Row getRowFromTable(String query)
     {
-        Object[] data = new Object[numColumns];
+        String[] data = new String[numColumns];
         for (int i = 0; i < data.length; i++)
         {
             data[i] = createRandomString((int) (6 + Math.random() * 6));
@@ -265,6 +377,28 @@ public class Table
         Row dummy = new Row(this, data);
         rows.add(dummy);
         return dummy;
+    }
+    
+    /**
+     * <p>Gets a row from the database using the given string query.</p>
+     * <p>All changes made to the returned row will be updated to the database
+     * once the table is committed.</p>
+     * @param where
+     * @return Row or null
+     * @throws Exception 
+     */
+    public Row getRowWhere(String field, WhereTypes where, String value)
+    {
+    	for (Row r : rows) {
+    		if (r.has(field)) {
+    			if (where.equals(WhereTypes.EQUALS)) {
+    				if (r.get(field).equals(value)) {
+    					return r;
+    				}
+    			}
+    		}
+    	}
+    	return null;
     }
     
     /**
@@ -276,13 +410,14 @@ public class Table
      * @param query
      * @return 
      */
+    @Deprecated
     public Row[] getRowsFromTable(String query)
     {
         int end = (new Random()).nextInt(5);
         Row[] allDummies = new Row[2 + end];
         for (int j = 0; j < 2 + end; j++)
         {
-            Object[] data = new Object[numColumns];
+            String[] data = new String[numColumns];
             for (int i = 0; i < data.length; i++)
             {
                 data[i] = createRandomString((int) (6 + Math.random() * 6D));
@@ -293,6 +428,28 @@ public class Table
         }
         
         return allDummies;
+    }
+    
+    /**
+     * <p>Gets all Rows from the database using the given string query.</p>
+     * <p>All changes made to the returned rows will be updated to the database
+     * once the table is committed.</p>
+     * @param query
+     * @return ArrayList with all rows. Can be empty.
+     */
+    public ArrayList<Row> getRowsWhere(String field, WhereTypes where, String value)
+    {
+        ArrayList<Row> ret = new ArrayList<Row>();
+        for (Row r : rows) {
+    		if (r.has(field)) {
+    			if (where.equals(WhereTypes.EQUALS)) {
+    				if (r.get(field).equals(value)) {
+    					ret.add(r);
+    				}
+    			}
+    		}
+    	}
+    	return ret;
     }
     
     /**

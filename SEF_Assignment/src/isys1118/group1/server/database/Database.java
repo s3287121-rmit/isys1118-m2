@@ -1,5 +1,13 @@
 package isys1118.group1.server.database;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 /**
  * <p>Implements Database-related functions.</p>
  * 
@@ -24,15 +32,18 @@ public class Database
     
     private static Database db;
     
+    private final File dbDir;
+    
     /**
      * Creates a database connection using a singleton method. This needs to be
      * called before any database functions can work.
+     * @throws Exception 
      */
-    public static void connectToDatabase()
+    public static void connectToDatabase() throws Exception
     {
         if (db == null)
         {
-            db = new Database();
+            db = new Database("./db/");
         }
         else
         {
@@ -103,8 +114,14 @@ public class Database
     
     /**
      * Constructs Database. Empty constructor.
+     * @throws Exception 
      */
-     private Database() {}
+     private Database(String dbPath) throws Exception {
+    	 dbDir = new File("./db/");
+    	 if (!dbDir.isDirectory()) {
+    		 throw new Exception("Cannot find database!");
+    	 }
+     }
     
     /**
      * Tests to see if the current database is connected.
@@ -124,6 +141,61 @@ public class Database
     {
         Table dummy = new Table();
         return dummy;
+    }
+    
+    public Table getFullTable(String tableName) throws IOException {
+    	File tableFile = new File(dbDir, tableName + ".data");
+    	BufferedReader br = null;
+    	FileReader fr = null;
+    	boolean namesDone = false;
+    	boolean typesDone = false;
+    	
+    	try {
+			fr = new FileReader(tableFile);
+			br = new BufferedReader(fr);
+			Table t = new Table();
+			
+			// read each value and place it in a new row
+			while (br.ready()) {
+				String line = br.readLine().trim();
+				String[] split = line.split(",");
+				for (int i = 0; i < split.length; i++) {
+					split[i] = toJavaString(split[i]);
+				}
+				Row r = t.
+			}
+		}
+    	catch (FileNotFoundException e) {
+			throw e;
+		}
+    	finally {
+    		if (br != null) {
+    			br.close();
+    		}
+    		else if (fr != null) {
+    			fr.close();
+    		}
+    	}
+    }
+    
+    private String toJavaString(String dbString) {
+    	return dbString.replaceAll("&lt;", "<")
+    				   .replaceAll("&gt;", "<")
+    				   .replaceAll("&amp;", "&")
+    				   .replaceAll("&cm;", ",")
+    				   .replaceAll("&smc;", ";")
+    				   .replaceAll("&dqt;", "\"")
+    				   .replaceAll("&sqt;", "'");
+    }
+    
+    private String toDBString(String javaString) {
+    	return javaString.replaceAll("<", "&lt;")
+    					 .replaceAll(">", "&gt;")
+    					 .replaceAll("&", "&amp;")
+    					 .replaceAll("'", "&cm;")
+    					 .replaceAll(";", "&smc;")
+    					 .replaceAll("\"", "&dqt;")
+    					 .replaceAll("'", "&sqt;");
     }
     
 }

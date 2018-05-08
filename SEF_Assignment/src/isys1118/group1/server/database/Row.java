@@ -17,18 +17,18 @@ public final class Row
 
     private final Table fromTable;
     private final int length;
-    protected final ArrayList<Object> data;
+    protected final ArrayList<String> data;
     
     /**
      * Constructor using ArrayList.
      * @param parent
      * @param data
      */
-    protected Row(Table parent, ArrayList<Object> data)
+    protected Row(Table parent, ArrayList<String> data)
     {
         fromTable = parent;
         length = fromTable.numColumns;
-        this.data = new ArrayList<Object>(length);
+        this.data = new ArrayList<String>(length);
         setData(data);
     }
     
@@ -37,11 +37,11 @@ public final class Row
      * @param parent
      * @param data
      */
-    protected Row(Table parent, Object[] data)
+    protected Row(Table parent, String[] data)
     {
         fromTable = parent;
         length = fromTable.numColumns;
-        this.data = new ArrayList<Object>(length);
+        this.data = new ArrayList<String>(length);
         setData(data);
     }
     
@@ -54,7 +54,7 @@ public final class Row
     {
         fromTable = parent;
         length = fromTable.numColumns;
-        this.data = new ArrayList<Object>(length);
+        this.data = new ArrayList<String>(length);
     }
     
     /**
@@ -63,23 +63,15 @@ public final class Row
      * schema.
      * @param data
      */
-    public void setData(ArrayList<Object> data)
+    public void setData(ArrayList<String> data)
     {
         if (data.size() != length)
         {
             // TODO create DB Error
             throw new Error("Attempting to add data of different length.");
         }
-        if (fromTable.checkIfDataFits(data))
-        {
-            this.data.clear();
-            this.data.addAll(data);
-        }
-        else
-        {
-            // TODO create DB Error
-            throw new Error("Data did not match schema.");
-        }
+        this.data.clear();
+        this.data.addAll(data);
     }
 
     /**
@@ -88,25 +80,17 @@ public final class Row
      * schema.
      * @param data
      */
-    public void setData(Object[] data)
+    public void setData(String[] data)
     {
         if (data.length != length)
         {
             // TODO create DB Error
             throw new Error("Attempting to add data of different length.");
         }
-        if (fromTable.checkIfDataFits(data))
+        this.data.clear();
+        for (String o : data)
         {
-            this.data.clear();
-            for (Object o : data)
-            {
-                this.data.add(o);
-            }
-        }
-        else
-        {
-            // TODO create DB Error
-            throw new Error("Data did not match schema.");
+            this.data.add(o);
         }
     }
 
@@ -117,18 +101,9 @@ public final class Row
      * @param index Index of column to change.
      * @param value
      */
-    public void setColumn(int index, Object value)
+    public void setColumn(int index, String value)
     {
-        if (fromTable.checkIfDataFits(index, value))
-        {
-            data.set(index, value);
-        }
-        else
-        {
-            // TODO create DB Error
-            throw new Error("Trying to add wrong type of data to column: "
-                    + index);
-        }
+        data.set(index, value);
     }
 
     /**
@@ -138,7 +113,7 @@ public final class Row
      * @param columnName Name of column to change.
      * @param value
      */
-    public void setColumn(String columnName, Object value)
+    public void setColumn(String columnName, String value)
     {
         int pos = fromTable.getColumnIndex(columnName);
         if (pos < 0)
@@ -155,15 +130,14 @@ public final class Row
      * @param columnName
      * @return Data as object. Cast using {@link Table#getType(int)}.
      */
-    public Object get(String columnName)
+    public String get(String columnName)
     {
         int pos = fromTable.getColumnIndex(columnName);
         if (pos < 0)
         {
             // TODO create DB Error
-//          throw new Error("Table does not contain a column with name: "
-//                  + columnName);
-            pos = (new Random()).nextInt(length);
+            throw new Error("Table does not contain a column with name: "
+                    + columnName);
         }
         return data.get(pos);
     }
@@ -176,6 +150,10 @@ public final class Row
     public Object get(int index)
     {
         return data.get(index);
+    }
+    
+    public boolean has(String columnName) {
+    	return fromTable.getColumnIndex(columnName) >= 0;
     }
     
     /**
