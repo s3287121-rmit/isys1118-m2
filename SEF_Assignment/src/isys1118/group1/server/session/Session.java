@@ -4,6 +4,7 @@ import java.util.Random;
 
 import isys1118.group1.server.controller.Controller;
 import isys1118.group1.server.controller.MenuController;
+import isys1118.group1.server.database.Database;
 import isys1118.group1.shared.view.View;
 import isys1118.group1.shared.view.ViewSerial;
 
@@ -48,6 +49,11 @@ public class Session {
 		}
 		Random r = new Random();
 		sessionInst = new Session(r.nextLong());
+		try {
+			Database.connectToDatabase();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static boolean checkSession() {

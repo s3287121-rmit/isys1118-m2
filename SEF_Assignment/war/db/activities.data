@@ -1,0 +1,12 @@
+activityid,type,day,timeh,timem,durationm,courseid
+102,Lecture,Monday,14,30,120,acha8888
+165,Tutorial,Wednesday,10,30,120,acha8888
+123,Tutorial,Tuesday,9,30,120,acha8888
+111,Tutorial,Wednesday,12,30,120,acha8888
+202,Lecture,Monday,11,30,120,acha1935
+265,Tutorial,Wednesday,16,30,120,acha1935
+223,Practical,Tuesday,9,30,120,acha1935
+211,Tutorial,Wednesday,12,30,120,acha1935
+304,Lecture,Thursday,9,30,120,troy1100
+355,Tutorial,Wednesday,10,30,120,troy1100
+373,Practical,Tuesday,9,30,120,troy1100

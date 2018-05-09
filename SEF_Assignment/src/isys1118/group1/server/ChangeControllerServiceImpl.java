@@ -16,19 +16,22 @@ import isys1118.group1.shared.view.ViewSerial;
 public class ChangeControllerServiceImpl extends RemoteServiceServlet implements ChangeControllerService {
 
 	@Override
-	public ViewSerial changeController(String name, String id) throws Throwable {
+	public ViewSerial changeController(String name, String id) throws Exception {
 		
 		// type == Course
 		Controller toSet = null;
 		if (name.equals("course")) {
-			toSet = new CourseController();
+			toSet = new CourseController(id);
 		}
+		// type == activity
 		else if (name.equals("activity")) {
-			toSet = new ActivityController();
+			toSet = new ActivityController(id);
 		}
+		// type == course list
 		else if (name.equals("courselist")) {
 			toSet = new CourseListController();
 		}
+		// type == login - used only when user just logged in
 		else if (name.equals("login")) {
 			MenuController mc = new MenuController();
 			Session.sessionInst.setMenu(mc);
@@ -36,11 +39,13 @@ public class ChangeControllerServiceImpl extends RemoteServiceServlet implements
 			Session.sessionInst.run();
 			return Session.sessionInst.getViewSerial();
 		}
+		// type == logout - used only when user just logged out
 		else if (name.equals("logout")) {
 			// TODO login creation and setting
 		}
+		// type == activity edit
 		else if (name.equals("edit")) {
-			toSet = new ActivityEditController();
+			toSet = new ActivityEditController(id);
 		}
 		if (toSet != null) {
 			Session.sessionInst.setController(toSet);
@@ -48,7 +53,7 @@ public class ChangeControllerServiceImpl extends RemoteServiceServlet implements
 			return Session.sessionInst.getViewSerial();
 		}
 		
-		throw new Throwable("Couldn't find a controller type.");
+		throw new Exception("Couldn't find a controller type.");
 	}
 	
 }

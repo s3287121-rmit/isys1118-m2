@@ -8,7 +8,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import isys1118.group1.client.handlers.ControllerLink;
-import isys1118.group1.shared.model.CourseListModel;
 import isys1118.group1.shared.model.Model;
 
 public class CourseListView extends View {
@@ -25,40 +24,14 @@ public class CourseListView extends View {
 	private String[][] courses;
 
 	@Override
-	public void setView(Model model) {
-		CourseListModel cm = (CourseListModel) model;
-		
-		// title
-		title = "Test Course List";
-		
-		// courses
-		courses = new String[5][4];
-		
-		courses[0][0] = "abcd1234";
-		courses[0][1] = "Applied Something";
-		courses[0][2] = "This is a test description.";
-		courses[0][3] = "Pending";
-		
-		courses[1][0] = "asgf6831";
-		courses[1][1] = "Doing the thing";
-		courses[1][2] = "This is a test description.";
-		courses[1][3] = "Not Sent";
-		
-		courses[2][0] = "ghfd1258";
-		courses[2][1] = "Learning things";
-		courses[2][2] = "This is a test description.";
-		courses[2][3] = "Approved";
-		
-		courses[3][0] = "vbee1872";
-		courses[3][1] = "Big Course";
-		courses[3][2] = "This is a test description.";
-		courses[3][3] = "Rejected";
-		
-		courses[4][0] = "klhd9453";
-		courses[4][1] = "Teaching Something";
-		courses[4][2] = "This is a test description.";
-		courses[4][3] = "Pending";
-		
+	public void setView(Model model) {}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setCourses(String[][] courses) {
+		this.courses = courses;
 	}
 
 	@Override
@@ -77,13 +50,15 @@ public class CourseListView extends View {
 		
 		// courses
 		VerticalPanel coursePanel = new VerticalPanel();
+		coursePanel.addStyleName("card-list");
 		for (String[] courseSingle: courses) {
 			FocusPanel wrapper = new FocusPanel();
 			
 			VerticalPanel courseCard = new VerticalPanel();
-			courseCard.addStyleName("course-card");
+			courseCard.addStyleName("card");
 			
 			HorizontalPanel topLine = new HorizontalPanel();
+			topLine.addStyleName("card-half-line");
 			HTML topLineId = new HTML("<p>" + courseSingle[0] + "</p>");
 			topLine.add(topLineId);
 			HTML topLineName = new HTML("<p>" + courseSingle[1] + "</p>");
@@ -91,6 +66,7 @@ public class CourseListView extends View {
 			courseCard.add(topLine);
 			
 			HorizontalPanel bottomLine = new HorizontalPanel();
+			bottomLine.addStyleName("card-simple-line");
 			HTML bottomLineDesc = new HTML("<p>" + courseSingle[2] + "</p>");
 			bottomLine.add(bottomLineDesc);
 			HTML bottomLineStatus = new HTML("<p>" + courseSingle[3] + "</p>");

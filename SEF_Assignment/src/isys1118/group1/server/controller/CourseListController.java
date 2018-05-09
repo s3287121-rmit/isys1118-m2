@@ -1,9 +1,7 @@
 package isys1118.group1.server.controller;
 
 import isys1118.group1.shared.model.CourseListModel;
-import isys1118.group1.shared.model.CourseModel;
 import isys1118.group1.shared.view.CourseListView;
-import isys1118.group1.shared.view.CourseView;
 import isys1118.group1.shared.view.View;
 
 public class CourseListController extends Controller {
@@ -13,7 +11,10 @@ public class CourseListController extends Controller {
 
 	@Override
 	protected void loadData() {
-		view.setView(model);
+		model.setCoursesFromUser("");
+		// view.setView(model);
+		view.setTitle("All Courses");
+		view.setCourses(model.getCoursesForView());
 	}
 
 	@Override

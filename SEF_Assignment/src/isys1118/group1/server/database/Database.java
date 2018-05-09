@@ -1,12 +1,8 @@
 package isys1118.group1.server.database;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 
 /**
  * <p>Implements Database-related functions.</p>
@@ -44,6 +40,7 @@ public class Database
         if (db == null)
         {
             db = new Database("./db/");
+            System.out.println("Database connected at: " + db.dbDir.getAbsolutePath());
         }
         else
         {
@@ -74,6 +71,10 @@ public class Database
         {
             return DATABASE_CONNECTED;
         }
+    }
+    
+    public static Database getDatabase() {
+    	return db;
     }
     
     /**
@@ -119,7 +120,7 @@ public class Database
      private Database(String dbPath) throws Exception {
     	 dbDir = new File("./db/");
     	 if (!dbDir.isDirectory()) {
-    		 throw new Exception("Cannot find database!");
+    		 throw new Exception("Cannot find database at: " + dbDir.getAbsolutePath());
     	 }
      }
     
@@ -143,29 +144,41 @@ public class Database
         return dummy;
     }
     
-    public Table getFullTable(String tableName) throws IOException {
-    	File tableFile = new File(dbDir, tableName + ".data");
+    public Table getFullTable(String tableName) throws Exception {
+    	File tableFile = getTableDir(tableName);
     	BufferedReader br = null;
     	FileReader fr = null;
-    	boolean namesDone = false;
-    	boolean typesDone = false;
     	
     	try {
 			fr = new FileReader(tableFile);
 			br = new BufferedReader(fr);
-			Table t = new Table();
+			Table t = null;
 			
 			// read each value and place it in a new row
 			while (br.ready()) {
 				String line = br.readLine().trim();
 				String[] split = line.split(",");
+				
+				// remove DB chars and change to Java / HTML chars
 				for (int i = 0; i < split.length; i++) {
 					split[i] = toJavaString(split[i]);
 				}
-				Row r = t.
+				
+				// do names if on first line
+				if (t == null) {
+					t = new Table(tableName, split);
+				}
+				// otherwise, add row as per usual
+				else {
+					t.createNewRow(split);	// swallows creation of faulty lines.
+				}
 			}
+			
+			// no errors, so return table
+			return t;
+			
 		}
-    	catch (FileNotFoundException e) {
+    	catch (Exception e) {
 			throw e;
 		}
     	finally {
@@ -178,9 +191,13 @@ public class Database
     	}
     }
     
-    private String toJavaString(String dbString) {
+    public File getTableDir(String tableName) {
+    	return new File(dbDir, tableName + ".data");
+    }
+    
+    protected static String toJavaString(String dbString) {
     	return dbString.replaceAll("&lt;", "<")
-    				   .replaceAll("&gt;", "<")
+    				   .replaceAll("&gt;", ">")
     				   .replaceAll("&amp;", "&")
     				   .replaceAll("&cm;", ",")
     				   .replaceAll("&smc;", ";")
@@ -188,7 +205,7 @@ public class Database
     				   .replaceAll("&sqt;", "'");
     }
     
-    private String toDBString(String javaString) {
+    protected static String toDBString(String javaString) {
     	return javaString.replaceAll("<", "&lt;")
     					 .replaceAll(">", "&gt;")
     					 .replaceAll("&", "&amp;")

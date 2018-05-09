@@ -1,0 +1,10 @@
+userid,name,password,type,rated,ratec
+e84412,Zeus,lightning,approver,56,65
+e25231,Atrides,king,coordinator,50,30
+e39431,Priam,wall,coordinator,51,20
+e89953,Hector,spear,casual,25,39
+e12348,Paris,bow,casual,28,44
+e12935,Helen,beauty,casual,24,12
+e20951,Ajax,muscle,casual,27,92
+e22452,Achilles,myrmidon,casual,34,22
+e12684,Patroclus,friend,casual,29,50

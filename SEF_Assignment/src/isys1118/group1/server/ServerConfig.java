@@ -3,7 +3,6 @@ package isys1118.group1.server;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import isys1118.group1.server.controller.CourseController;
 import isys1118.group1.server.controller.MenuController;
 import isys1118.group1.server.session.Session;
 

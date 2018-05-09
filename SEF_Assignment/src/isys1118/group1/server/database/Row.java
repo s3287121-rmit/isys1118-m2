@@ -1,7 +1,6 @@
 package isys1118.group1.server.database;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * <p>Represents a row in a table in the database.<p>
@@ -23,8 +22,9 @@ public final class Row
      * Constructor using ArrayList.
      * @param parent
      * @param data
+     * @throws Exception 
      */
-    protected Row(Table parent, ArrayList<String> data)
+    protected Row(Table parent, ArrayList<String> data) throws Exception
     {
         fromTable = parent;
         length = fromTable.numColumns;
@@ -36,8 +36,9 @@ public final class Row
      * Constructor using Object array.
      * @param parent
      * @param data
+     * @throws Exception 
      */
-    protected Row(Table parent, String[] data)
+    protected Row(Table parent, String[] data) throws Exception
     {
         fromTable = parent;
         length = fromTable.numColumns;
@@ -62,13 +63,14 @@ public final class Row
      * length and types of {@code data} need to match those of the table's
      * schema.
      * @param data
+     * @throws Exception 
      */
-    public void setData(ArrayList<String> data)
+    public void setData(ArrayList<String> data) throws Exception
     {
         if (data.size() != length)
         {
             // TODO create DB Error
-            throw new Error("Attempting to add data of different length.");
+            throw new Exception("Attempting to add data of different length.");
         }
         this.data.clear();
         this.data.addAll(data);
@@ -79,13 +81,14 @@ public final class Row
      * length and types of {@code data} need to match those of the table's
      * schema.
      * @param data
+     * @throws Exception 
      */
-    public void setData(String[] data)
+    public void setData(String[] data) throws Exception
     {
         if (data.length != length)
         {
             // TODO create DB Error
-            throw new Error("Attempting to add data of different length.");
+            throw new Exception("Attempting to add data of different length.");
         }
         this.data.clear();
         for (String o : data)
@@ -147,7 +150,7 @@ public final class Row
      * @param index
      * @return Data as object. Cast using {@link Table#getType(int)}.
      */
-    public Object get(int index)
+    public String get(int index)
     {
         return data.get(index);
     }

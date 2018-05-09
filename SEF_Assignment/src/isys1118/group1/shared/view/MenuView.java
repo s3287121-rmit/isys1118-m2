@@ -1,9 +1,12 @@
 package isys1118.group1.shared.view;
 
+import java.util.ArrayList;
+
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import isys1118.group1.client.LogClient;
 import isys1118.group1.client.handlers.ControllerLink;
 import isys1118.group1.shared.model.MenuModel;
 import isys1118.group1.shared.model.Model;
@@ -31,7 +34,7 @@ public class MenuView extends View {
 		options[0][2] = "Courses";
 		
 		options[1][0] = "course";
-		options[1][1] = "";
+		options[1][1] = "acha8888";
 		options[1][2] = "Test Course";
 		
 		options[2][0] = "logout";
@@ -62,6 +65,9 @@ public class MenuView extends View {
 			anOption.addClickHandler(new ControllerLink(optionSingle[0], optionSingle[1]));
 			vp.add(anOption);
 		}
+		ArrayList<String> strings = new ArrayList<String>();
+		strings.add("Hello");
+		LogClient.logMessage(strings.get(0));
 	}
 
 }

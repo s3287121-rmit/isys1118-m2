@@ -1,18 +1,66 @@
 package isys1118.group1.shared.model;
 
-import java.util.Random;
+import java.util.ArrayList;
+
+import isys1118.group1.server.database.Database;
+import isys1118.group1.server.database.Row;
+import isys1118.group1.server.database.Table;
+import isys1118.group1.server.Course;
 
 public class CourseListModel extends Model {
 	
-	public final String name;
+	private static final int ARRAY_LEN = 4;
 	
-	public CourseListModel() {
-		Random r = new Random();
-		char[] title = new char[10];
-		for (int i = 0; i < title.length; i++) {
-			title[i] = (char) (r.nextInt(25) + 65);
+	private ArrayList<Course> courses = new ArrayList<Course>();
+	
+	public void setCoursesFromUser(String userId) {
+		// TODO get courses that are only accessible to user
+		try {
+			Table courses = Database.getDatabase().getFullTable("courses");
+			for (int i = 0; i < courses.getNumRows(); i++) {
+				addCourse(courses.getRowIndex(i));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		name = new String(title);
+	}
+	
+	public String[][] getCoursesForView() {
+		String[][] courseArr = new String[courses.size()][ARRAY_LEN];
+		
+		for (int i = 0; i < courses.size(); i++) {
+			Course c = courses.get(i);
+			courseArr[i][0] = c.getCourseId();
+			courseArr[i][1] = c.getCourseName();
+			String fullDesc = c.getDescription();
+			String shortDesc = reduceString(fullDesc);
+			courseArr[i][2] = shortDesc;
+			courseArr[i][3] = c.getCourseId();
+		}
+		
+		return courseArr;
+	}
+	
+	private String reduceString(String src) {
+		String ret = src.replaceAll("<p>", "")
+						.replaceAll("</p>", " ")
+						.trim();
+		if (ret.length() > 100) {
+			return ret.substring(0, 100) + "...";
+		}
+		else {
+			return ret;
+		}
+	}
+	
+	private void addCourse(Row row) {
+		Course course = new Course();
+		course.setFromRow(row);
+		courses.add(course);
+	}
+	
+	public ArrayList<Course> getCourses() {
+		return courses;
 	}
 
 }

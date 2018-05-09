@@ -63,5 +63,57 @@ h1 {
 }
 
 div {
-	box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.card p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.card {
+  border: black solid 1px;
+  padding: 5px;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.card-third-line, .card-half-line, .card-simple-line {
+  width: 100%;
+}
+
+.card-third-line td {
+  min-width: 20%;
+}
+
+.card-half-line td {
+  min-width: 40%;
+}
+
+.right-align {
+	float: right;
+}
+
+.card:hover, .pretty-link:hover {
+  background-color: #E0E0FF;
+}
+
+.card:hover, .pretty-link {
+  cursor: pointer;
+}
+
+.pretty-link {
+  color: #0000A0;
+}
+
+.card-list {
+  width: 800px;
+}
+
+.no-overflow {
+  overflow: hidden;
+}
+
+.rejected {
+	color: red;
 }
