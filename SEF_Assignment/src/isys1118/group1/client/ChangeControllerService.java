@@ -8,6 +8,8 @@ import isys1118.group1.shared.view.ViewSerial;
 @RemoteServiceRelativePath("change")
 public interface ChangeControllerService extends RemoteService {
 
-	public ViewSerial changeController(String type, String id) throws Throwable;
+	public ViewSerial changeController(String type, String id) throws Exception;
+
+	public ViewSerial addActivity(String courseId) throws Exception;
 	
 }

@@ -9,6 +9,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import isys1118.group1.client.handlers.ControllerLink;
+import isys1118.group1.client.handlers.CourseStatusHandler;
+import isys1118.group1.client.handlers.CreateActivityHandler;
 import isys1118.group1.shared.model.Model;
 
 public class CourseView extends View {
@@ -18,6 +20,7 @@ public class CourseView extends View {
 	public static final int APPROVAL_ACCEPTED = 0x1003;
 	public static final int APPROVAL_REJECTED = 0x1004;
 	
+	private String courseId;
 	private String title;
 	private String description;
 	/**
@@ -36,6 +39,10 @@ public class CourseView extends View {
 
 	@Override
 	public void setView(Model model) {}
+
+	public void setCourseId(String courseId) {
+		this.courseId = courseId;
+	}
 
 	public void setTitle(String title) {
 		this.title = title;
@@ -85,9 +92,11 @@ public class CourseView extends View {
 		actPanel.addStyleName("card-list");
 		for (String[] actSingle: activities) {
 			FocusPanel wrapper = new FocusPanel();
+			actPanel.add(wrapper);
 			
 			VerticalPanel actCard = new VerticalPanel();
 			actCard.addStyleName("card");
+			wrapper.add(actCard);
 			
 			HorizontalPanel topLine = new HorizontalPanel();
 			topLine.addStyleName("card-third-line");
@@ -104,10 +113,14 @@ public class CourseView extends View {
 			bottomLine.add(bottomLineCasId);
 			actCard.add(bottomLine);
 			
-			wrapper.add(actCard);
 			wrapper.addClickHandler(new ControllerLink("activity", actSingle[0]));
-			actPanel.add(wrapper);
 		}
+		
+		// add activity button
+		Button edit = new Button("Add new activity");
+		edit.addClickHandler(new CreateActivityHandler(courseId));
+		edit.setStyleName("right-align");
+		vp.add(edit);
 		
 		// budget
 		HTML budgetHeader = new HTML("<h2>Budget</h2>");
@@ -130,6 +143,7 @@ public class CourseView extends View {
 			Button sendButton = new Button();
 			sendButton.setText("Send for approval");
 			sendButton.addStyleName("right-align");
+			sendButton.addClickHandler(new CourseStatusHandler(courseId, "pending"));
 			status.setHTML("<p>Course needs to be sent for approval!</p>");
 			vp.add(sendButton);
 		}
@@ -138,8 +152,10 @@ public class CourseView extends View {
 			hp.addStyleName("right-align");
 			Button acceptButton = new Button();
 			acceptButton.setText("Accept");
+			acceptButton.addClickHandler(new CourseStatusHandler(courseId, "accepted"));
 			Button rejectButton = new Button();
 			rejectButton.setText("Reject");
+			rejectButton.addClickHandler(new CourseStatusHandler(courseId, "rejected"));
 			status.setHTML("<p>Course is waiting for approval.</p>");
 			hp.add(acceptButton);
 			hp.add(rejectButton);

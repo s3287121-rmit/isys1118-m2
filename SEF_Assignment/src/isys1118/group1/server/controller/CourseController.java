@@ -24,6 +24,7 @@ public class CourseController extends Controller {
 			Row row = fullTable.getRowEquals("courseid", model.getCourseId());
 			if (row != null) {
 				model.setCourseFromRow(row);
+				view.setCourseId(model.getCourseId());
 				view.setTitle(model.getViewTitle());
 				view.setDescription(model.getViewDescription());
 				view.setActivities(model.getViewActivities());

@@ -35,7 +35,7 @@ public class CourseListModel extends Model {
 			String fullDesc = c.getDescription();
 			String shortDesc = reduceString(fullDesc);
 			courseArr[i][2] = shortDesc;
-			courseArr[i][3] = c.getCourseId();
+			courseArr[i][3] = c.getStatus();
 		}
 		
 		return courseArr;

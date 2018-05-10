@@ -31,6 +31,16 @@
     <url-pattern>/sef_assignment/change</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>changeStatus</servlet-name>
+    <servlet-class>isys1118.group1.server.ChangeCourseStatusServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>changeStatus</servlet-name>
+    <url-pattern>/sef_assignment/coursestatus</url-pattern>
+  </servlet-mapping>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>SEF_Assignment.html</welcome-file>

@@ -198,19 +198,19 @@ public class Database
     protected static String toJavaString(String dbString) {
     	return dbString.replaceAll("&lt;", "<")
     				   .replaceAll("&gt;", ">")
-    				   .replaceAll("&amp;", "&")
     				   .replaceAll("&cm;", ",")
     				   .replaceAll("&smc;", ";")
     				   .replaceAll("&dqt;", "\"")
-    				   .replaceAll("&sqt;", "'");
+    				   .replaceAll("&sqt;", "'")
+    				   .replaceAll("&amp;", "&");
     }
     
     protected static String toDBString(String javaString) {
-    	return javaString.replaceAll("<", "&lt;")
+    	return javaString.replaceAll(";", "&smc;")
+    					 .replaceAll("&(?!smc;)", "&amp;")
+    					 .replaceAll("<", "&lt;")
     					 .replaceAll(">", "&gt;")
-    					 .replaceAll("&", "&amp;")
-    					 .replaceAll("'", "&cm;")
-    					 .replaceAll(";", "&smc;")
+    					 .replaceAll(",", "&cm;")
     					 .replaceAll("\"", "&dqt;")
     					 .replaceAll("'", "&sqt;");
     }

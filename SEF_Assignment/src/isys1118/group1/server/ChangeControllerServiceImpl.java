@@ -1,5 +1,7 @@
 package isys1118.group1.server;
 
+import java.util.Random;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import isys1118.group1.client.ChangeControllerService;
@@ -9,6 +11,9 @@ import isys1118.group1.server.controller.Controller;
 import isys1118.group1.server.controller.CourseController;
 import isys1118.group1.server.controller.CourseListController;
 import isys1118.group1.server.controller.MenuController;
+import isys1118.group1.server.database.Database;
+import isys1118.group1.server.database.Row;
+import isys1118.group1.server.database.Table;
 import isys1118.group1.server.session.Session;
 import isys1118.group1.shared.view.ViewSerial;
 
@@ -45,7 +50,7 @@ public class ChangeControllerServiceImpl extends RemoteServiceServlet implements
 		}
 		// type == activity edit
 		else if (name.equals("edit")) {
-			toSet = new ActivityEditController(id);
+			toSet = new ActivityEditController(id, false);
 		}
 		if (toSet != null) {
 			Session.sessionInst.setController(toSet);
@@ -54,6 +59,27 @@ public class ChangeControllerServiceImpl extends RemoteServiceServlet implements
 		}
 		
 		throw new Exception("Couldn't find a controller type.");
+	}
+
+	@Override
+	public ViewSerial addActivity(String courseId) throws Exception {
+
+		// create random id and check table to see if it exists
+		Table fullTable = Database.getDatabase().getFullTable("activities");
+		Row check = null;
+		Random rand = new Random();
+		int nextId = 0;
+		do {
+			nextId = rand.nextInt(9999) + 1;
+			fullTable.getRowEquals("activityid", String.valueOf(nextId));
+		}
+		while (check != null);
+		
+		// TODO create activityedit with random id
+		ActivityEditController aec = new ActivityEditController(String.valueOf(nextId), true);
+		
+		
+		return null;
 	}
 	
 }

@@ -7,5 +7,7 @@ import isys1118.group1.shared.view.ViewSerial;
 public interface ChangeControllerServiceAsync {
 
 	public void changeController(String type, String id, AsyncCallback<ViewSerial> callback);
+
+	public void addActivity(String courseId, AsyncCallback<ViewSerial> callback);
 	
 }

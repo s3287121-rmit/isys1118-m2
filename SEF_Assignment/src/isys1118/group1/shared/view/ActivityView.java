@@ -86,6 +86,8 @@ public class ActivityView extends View {
 		
 		// edit button
 		Button edit = new Button("Edit");
+		edit.addClickHandler(new ControllerLink("edit", activityId));
+		edit.setStyleName("right-align");
 		vp.add(edit);
 	}
 

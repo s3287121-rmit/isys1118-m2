@@ -9,15 +9,15 @@ import isys1118.group1.server.database.Table;
 @SuppressWarnings("serial")
 public class Activity implements Serializable {
 
-	private String activityId;
-	private String courseId;
-	private String type;
-	private String day;
-	private int startTimeH;
-	private int startTimeM;
-	private int durationM;
-	private String assignedCasualId;
-	private String assignedCasualName;
+	private String activityId = null;
+	private String courseId = null;
+	private String type = null;
+	private String day = null;
+	private int startTimeH = -1;
+	private int startTimeM = -1;
+	private int durationM = -1;
+	private String assignedCasualId = null;
+	private String assignedCasualName = null;
 	
 	public void setFromRow(Row row) {
 		this.activityId = row.get("activityid");
