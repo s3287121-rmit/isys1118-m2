@@ -41,7 +41,7 @@ public class Activity implements Serializable {
 			if (assignedCasRow != null) {
 				this.assignedCasualId = assignedCasRow.get("userid");
 				Row cas = users.getRowEquals("userid", assignedCasualId);
-				this.setAssignedCasualName(cas.get("name"));
+				this.assignedCasualName = cas.get("name");
 			}
 			// otherwise the casual is null
 			else {

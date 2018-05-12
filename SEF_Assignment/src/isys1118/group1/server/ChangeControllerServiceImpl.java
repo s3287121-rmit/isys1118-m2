@@ -77,9 +77,9 @@ public class ChangeControllerServiceImpl extends RemoteServiceServlet implements
 		
 		// TODO create activityedit with random id
 		ActivityEditController aec = new ActivityEditController(String.valueOf(nextId), true);
-		
-		
-		return null;
+		Session.sessionInst.setController(aec);
+		aec.loadEmpty(courseId);	// unique method for loading.
+		return Session.sessionInst.getViewSerial();
 	}
 	
 }

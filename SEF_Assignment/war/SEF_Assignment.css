@@ -121,3 +121,8 @@ div {
 #message, #popup {
 	visibility: hidden;
 }
+
+.form-error {
+	color: red;
+	display: none;
+}

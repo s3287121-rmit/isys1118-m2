@@ -28,7 +28,7 @@ public class Database
     
     private static Database db;
     
-    private final File dbDir;
+    public final File dbDir;
     
     /**
      * Creates a database connection using a singleton method. This needs to be

@@ -177,6 +177,38 @@ public class Table
     }
     
     /**
+     * <p>Gets a row from the database using the given values. Multiple fields
+     * can be searched.</p>
+     * <p>All changes made to the returned row will be updated to the database
+     * once the table is committed.</p>
+     * @param fields
+     * @param values
+     * @return Row or null
+     * @throws Exception 
+     */
+    public Row getRowEquals(String[] fields, String[] values) {
+    	if (fields.length != values.length) {
+    		return null;
+    	}
+    	for (Row r : rows) {
+    		boolean missingValue = false;
+    		for (int i = 0; i < fields.length; i++) {
+    			if (!r.has(fields[i])) {
+    				return null;
+    			}
+    			if (!r.get(fields[i]).equals(values[i])) {
+    				missingValue = true;
+    				break;
+    			}
+    		}
+    		if (!missingValue) {
+    			return r;
+    		}
+    	}
+    	return null;
+    }
+    
+    /**
      * <p>Gets all Rows from the database using the given string query.</p>
      * <p>All changes made to the returned rows will be updated to the database
      * once the table is committed.</p>
@@ -227,6 +259,37 @@ public class Table
     }
     
     /**
+     * <p>Gets all Rows from the database using the given fields.</p>
+     * <p>All changes made to the returned rows will be updated to the database
+     * once the table is committed.</p>
+     * @param query
+     * @return ArrayList with all rows. Can be empty.
+     */
+    public ArrayList<Row> getRowsEqual(String[] fields, String[] values)
+    {
+        ArrayList<Row> ret = new ArrayList<Row>();
+        if (fields.length != values.length) {
+    		return null;
+    	}
+    	for (Row r : rows) {
+    		boolean missingValue = false;
+    		for (int i = 0; i < fields.length; i++) {
+    			if (!r.has(fields[i])) {
+    				return ret;
+    			}
+    			if (!r.get(fields[1]).equals(values[i])) {
+    				missingValue = true;
+    				break;
+    			}
+    		}
+    		if (!missingValue) {
+    			ret.add(r);
+    		}
+    	}
+    	return ret;
+    }
+    
+    /**
      * Commits all changes to rows so far.
      * @return
      * @throws Exception 
@@ -249,13 +312,13 @@ public class Table
     	}
     	
     	// add all rows
-    	for (Row r : rows) {
+    	for (int j = 0; j < rows.size(); j++) {
     		for (int i = 0; i < numColumns; i++) {
-        		sb.append(Database.toDBString(r.get(i)));
+        		sb.append(Database.toDBString(rows.get(j).get(i)));
         		if (i < numColumns - 1) {
         			sb.append(",");
         		}
-        		else {
+        		else if (j < rows.size() - 1) {
         			sb.append("\n");
         		}
         	}

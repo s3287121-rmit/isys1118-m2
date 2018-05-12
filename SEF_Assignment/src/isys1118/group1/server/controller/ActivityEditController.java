@@ -18,6 +18,7 @@ public class ActivityEditController extends Controller {
 	
 	public void loadEmpty(String courseId) {
 		model.setActitiyCourseId(courseId);
+		setView();
 	}
 
 	@Override
@@ -29,22 +30,26 @@ public class ActivityEditController extends Controller {
 				Row row = fullTable.getRowEquals("activityid", model.getActivityId());
 				if (row != null) {
 					model.setActivityFromRow(row);
-					view.setTitle("Edit Activity");
-					view.setActivityId(model.getActivityId());
-					view.setCourseId(model.getViewCourseId());
-					view.setCasualName(model.getViewCourseName());
-					view.setType(model.getViewType());
-					view.setDay(model.getViewDay());
-					view.setStartTimeH(model.getViewTimeH());
-					view.setStartTimeM(model.getViewTimeM());
-					view.setDuration(model.getViewDurationM());
-					view.setCasualId(model.getViewAssignedCasualId());
-					view.setCasualId(model.getViewAssignedCasualName());
+					setView();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private void setView() {
+		view.setTitle("Edit Activity");
+		view.setActivityId(model.getActivityId());
+		view.setCourseId(model.getViewCourseId());
+		view.setCourseName(model.getViewCourseName());
+		view.setType(model.getViewType());
+		view.setDay(model.getViewDay());
+		view.setStartTimeH(model.getViewTimeH());
+		view.setStartTimeM(model.getViewTimeM());
+		view.setDuration(model.getViewDurationM());
+		view.setCasualId(model.getViewAssignedCasualId());
+		view.setCasualName(model.getViewAssignedCasualName());
 	}
 
 	@Override
@@ -55,7 +60,9 @@ public class ActivityEditController extends Controller {
 
 	@Override
 	public void run() {
-		loadData();
+		if (!model.isConstructed()) {
+			loadData();
+		}
 	}
 
 	@Override

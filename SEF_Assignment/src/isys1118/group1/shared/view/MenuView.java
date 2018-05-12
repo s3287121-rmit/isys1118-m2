@@ -1,14 +1,11 @@
 package isys1118.group1.shared.view;
 
-import java.util.ArrayList;
-
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import isys1118.group1.client.LogClient;
 import isys1118.group1.client.handlers.ControllerLink;
-import isys1118.group1.shared.model.MenuModel;
+import isys1118.group1.client.handlers.ResetDatabaseHandler;
 import isys1118.group1.shared.model.Model;
 
 public class MenuView extends View {
@@ -24,7 +21,6 @@ public class MenuView extends View {
 
 	@Override
 	public void setView(Model model) {
-		MenuModel cm = (MenuModel) model;
 		
 		// options
 		options = new String[3][3];
@@ -34,12 +30,16 @@ public class MenuView extends View {
 		options[0][2] = "Courses";
 		
 		options[1][0] = "course";
-		options[1][1] = "acha8888";
+		options[1][1] = "troy1100";
 		options[1][2] = "Test Course";
 		
-		options[2][0] = "logout";
-		options[2][1] = "";
-		options[2][2] = "Log Out";
+		options[2][0] = "activity";
+		options[2][1] = "102";
+		options[2][2] = "Test Activity";
+		
+		options[3][0] = "courselist";
+		options[3][1] = "reset";
+		options[3][2] = "Reset Database";
 		
 	}
 
@@ -62,12 +62,14 @@ public class MenuView extends View {
 		vp.add(optionPanel);
 		for (String[] optionSingle: options) {
 			HTML anOption = new HTML(optionSingle[2]);
-			anOption.addClickHandler(new ControllerLink(optionSingle[0], optionSingle[1]));
+			if (optionSingle[1].equals("reset")) {
+				anOption.addClickHandler(new ResetDatabaseHandler(optionSingle[0], optionSingle[1]));
+			}
+			else {
+				anOption.addClickHandler(new ControllerLink(optionSingle[0], optionSingle[1]));
+			}
 			vp.add(anOption);
 		}
-		ArrayList<String> strings = new ArrayList<String>();
-		strings.add("Hello");
-		LogClient.logMessage(strings.get(0));
 	}
 
 }

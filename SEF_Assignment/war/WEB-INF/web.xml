@@ -41,6 +41,16 @@
     <url-pattern>/sef_assignment/coursestatus</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>submitActivity</servlet-name>
+    <servlet-class>isys1118.group1.server.SubmitActivityServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>submitActivity</servlet-name>
+    <url-pattern>/sef_assignment/submit</url-pattern>
+  </servlet-mapping>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>SEF_Assignment.html</welcome-file>

@@ -1,10 +1,6 @@
 package isys1118.group1.shared.view;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
-import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -83,6 +79,15 @@ public class ActivityEditView extends View {
 		final RootPanel title = RootPanel.get("title");
 		final RootPanel content = RootPanel.get("content");
 		
+		// set up all strings -- this accounts for null and unset values
+		String courseStr = this.courseId + " " + this.courseName;
+		String typeStr = this.type == null ? "" : this.type;
+		String dayStr = this.day == null ? "" : this.day;
+		String startTimeHStr = this.startTimeH == -1 ? "" : String.valueOf(this.startTimeH);
+		String startTimeMStr = this.startTimeM == -1 ? "" : String.valueOf(this.startTimeM);
+		String durationMStr = this.durationM == -1 ? "" : String.valueOf(this.durationM);
+		String casualStr = this.casualId == null ? "" : this.casualId + " " + this.casualName;
+		
 		// clear screen
 		clearMain();
 		
@@ -93,74 +98,87 @@ public class ActivityEditView extends View {
 		content.add(vp);
 		
 		// details
-		HTML courseLink = new HTML("<p>Course: " + courseId + " " + courseName + "</p>");
+		HTML courseLink = new HTML("<p>Course: " + courseStr + "</p>");
 		// courseLink.addClickHandler(new ControllerLink("course", courseId));
 		vp.add(courseLink);
 		
-		// form
-		FormPanel form = new FormPanel();
-		form.setEncoding(FormPanel.ENCODING_URLENCODED);
-		form.setMethod(FormPanel.METHOD_POST);
-		form.setAction("/activitysubmit");
-		
-		// Add an event handler to the form.
-		form.addSubmitHandler(new FormPanel.SubmitHandler() {
-	    	@Override
-	    	public void onSubmit(SubmitEvent event) {
-	    		// TODO validate
-	    	}
-		});
-
-		form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-			@Override
-			public void onSubmitComplete(SubmitCompleteEvent event) {
-				// When the form submission is successfully completed,
-				// this event is fired. Assuming the service returned 
-				// a response of type text/html, we can get the result
-				// here.
-				Window.alert(event.getResults());
-			}
-		});
-		
-		vp.add(form);
-		VerticalPanel vpForm = new VerticalPanel();
-		form.add(vpForm);
-		
+		// Type
+		HorizontalPanel typeHP = new HorizontalPanel();
+		HTML typeLabel = new HTML("<P>Activity Type: </p>");
+		typeHP.add(typeLabel);
 		TextBox typeBox = new TextBox();
-		typeBox.setText("Type");
-		typeBox.setValue(this.type);
-		vpForm.add(typeBox);
-		
+		typeBox.getElement().setId("edit-type");
+		typeBox.setValue(typeStr);
+		typeHP.add(typeBox);
+		HTML typeError = new HTML();
+		typeError.getElement().setId("edit-type-error");
+		typeError.addStyleName("form-error");
+		typeHP.add(typeError);
+		vp.add(typeHP);
+
+		// Day
+		HorizontalPanel dayHP = new HorizontalPanel();
+		HTML dayLabel = new HTML("<P>Day: </p>");
+		dayHP.add(dayLabel);
 		TextBox dayBox = new TextBox();
-		dayBox.setText("Day");
-		dayBox.setValue(this.day);
-		vpForm.add(dayBox);
+		dayBox.getElement().setId("edit-day");
+		dayBox.setValue(dayStr);
+		dayHP.add(dayBox);
+		HTML dayError = new HTML();
+		dayError.getElement().setId("edit-day-error");
+		dayError.addStyleName("form-error");
+		dayHP.add(dayError);
+		vp.add(dayHP);
 		
-		HorizontalPanel hpTime = new HorizontalPanel();
-		HTML label = new HTML("<P>Start Time:</p>");
-		hpTime.add(label);
+		// Start Time
+		HorizontalPanel timeHP = new HorizontalPanel();
+		HTML labelTime = new HTML("<P>Start Time: </p>");
+		timeHP.add(labelTime);
 		TextBox timeBoxH = new TextBox();
-		timeBoxH.setText("TimeH");
-		timeBoxH.setValue(String.valueOf(this.startTimeH));
-		hpTime.add(timeBoxH);
-		HTML colon = new HTML("<P>:</p>");
-		hpTime.add(colon);
+		timeBoxH.getElement().setId("edit-timestarth");
+		timeBoxH.setValue(startTimeHStr);
+		timeHP.add(timeBoxH);
+		HTML colon = new HTML("<P> : </p>");
+		timeHP.add(colon);
 		TextBox timeBoxM = new TextBox();
-		timeBoxM.setText("TimeM");
-		timeBoxM.setValue(String.valueOf(this.startTimeM));
-		hpTime.add(timeBoxM);
-		vpForm.add(hpTime);
+		timeBoxM.getElement().setId("edit-timestartm");
+		timeBoxM.setValue(startTimeMStr);
+		timeHP.add(timeBoxM);
+		HTML timeError = new HTML();
+		timeError.getElement().setId("edit-timestart-error");
+		timeError.addStyleName("form-error");
+		timeHP.add(timeError);
+		vp.add(timeHP);
 		
+		// Duration
+		HorizontalPanel durationHP = new HorizontalPanel();
+		HTML durationLabel = new HTML("<P>Duration: </p>");
+		durationHP.add(durationLabel);
 		TextBox durBox = new TextBox();
-		durBox.setText("Duration");
-		durBox.setValue(String.valueOf(this.durationM));
-		vpForm.add(durBox);
-		
+		durBox.getElement().setId("edit-durationm");
+		durBox.setValue(durationMStr);
+		durationHP.add(durBox);
+		HTML durationError = new HTML();
+		durationError.getElement().setId("edit-durationm-error");
+		durationError.addStyleName("form-error");
+		durationHP.add(durationError);
+		vp.add(durationHP);
+
+		// Casual
+		HorizontalPanel casualHP = new HorizontalPanel();
+		HTML casualLabel = new HTML("<P>Casual: </p>");
+		casualHP.add(casualLabel);
 		TextBox casualBox = new TextBox();
-		casualBox.setText("Casual");
-		casualBox.setValue(this.casualId + " " + this.casualName);
+		casualBox.getElement().setId("edit-casual");
+		casualBox.setValue(casualStr);
 		casualBox.setEnabled(false);
-		vpForm.add(casualBox);
+		casualHP.add(casualBox);
+		HTML casualError = new HTML();
+		casualError.getElement().setId("edit-casual-error");
+		casualError.addStyleName("form-error");
+		casualHP.add(casualError);
+		vp.add(casualHP);
+		
 		// TODO casualPopup handler
 		
 		// submit and cancel buttons
@@ -169,10 +187,10 @@ public class ActivityEditView extends View {
 		Button cancelButton = new Button("Cancel");
 		cancelButton.addClickHandler(new ControllerLink("activity", activityId));
 		SubmitButton submitButton = new SubmitButton("Submit");
-		submitButton.addClickHandler(new SubmitActivityHandler(form));
+		submitButton.addClickHandler(new SubmitActivityHandler(activityId, courseId));
 		buttonPanel.add(cancelButton);
 		buttonPanel.add(submitButton);
-		vpForm.add(buttonPanel);
+		vp.add(buttonPanel);
 		
 	}
 

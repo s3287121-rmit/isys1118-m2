@@ -44,6 +44,9 @@ public class LogClient {
 	}
 	
 	public static void logError(String message, Throwable error) {
+		if (!message.endsWith("\n")) {
+			message = message + "\n";
+		}
 		logger.log(Level.SEVERE, message, error);
 	}
 	
