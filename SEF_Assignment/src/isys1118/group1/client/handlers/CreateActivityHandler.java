@@ -7,7 +7,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import isys1118.group1.client.ChangeControllerService;
 import isys1118.group1.client.ChangeControllerServiceAsync;
-import isys1118.group1.client.LogClient;
+import isys1118.group1.client.helpers.LogClient;
 import isys1118.group1.shared.view.View;
 import isys1118.group1.shared.view.ViewSerial;
 

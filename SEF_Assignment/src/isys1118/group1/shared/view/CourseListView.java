@@ -8,7 +8,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import isys1118.group1.client.handlers.ControllerLink;
-import isys1118.group1.shared.model.Model;
 
 public class CourseListView extends View {
 	
@@ -24,7 +23,7 @@ public class CourseListView extends View {
 	private String[][] courses;
 
 	@Override
-	public void setView(Model model) {}
+	public void setView() {}
 
 	public void setTitle(String title) {
 		this.title = title;

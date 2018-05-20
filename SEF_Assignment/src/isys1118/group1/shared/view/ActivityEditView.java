@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import isys1118.group1.client.handlers.ControllerLink;
 import isys1118.group1.client.handlers.SubmitActivityHandler;
-import isys1118.group1.shared.model.Model;
 
 public class ActivityEditView extends View {
 	
@@ -28,7 +27,7 @@ public class ActivityEditView extends View {
 	private String casualName;
 
 	@Override
-	public void setView(Model model) {}
+	public void setView() {}
 
 	public void setTitle(String title) {
 		this.title = title;

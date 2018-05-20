@@ -1,4 +1,4 @@
-package isys1118.group1.server;
+package isys1118.group1.server.helpers;
 
 import java.io.Serializable;
 
@@ -18,6 +18,7 @@ public class Activity implements Serializable {
 	private int durationM = -1;
 	private String assignedCasualId = null;
 	private String assignedCasualName = null;
+	private String casualPrice = null;
 	
 	public void setFromRow(Row row) {
 		this.activityId = row.get("activityid");
@@ -160,6 +161,14 @@ public class Activity implements Serializable {
 		else {
 			return assignedCasualId + " " + assignedCasualName;
 		}
+	}
+
+	public String getCasualPrice() {
+		return casualPrice;
+	}
+
+	public void setCasualPrice(String casualPrice) {
+		this.casualPrice = casualPrice;
 	}
 
 	public void setRowToThis(Row dst) {

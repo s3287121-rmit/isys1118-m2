@@ -35,11 +35,11 @@ public class Database
      * called before any database functions can work.
      * @throws Exception 
      */
-    public static void connectToDatabase() throws Exception
+    public static void connectToDatabase(String directory) throws Exception
     {
         if (db == null)
         {
-            db = new Database("./db/");
+            db = new Database(directory);
             System.out.println("Database connected at: " + db.dbDir.getAbsolutePath());
         }
         else
@@ -118,7 +118,7 @@ public class Database
      * @throws Exception 
      */
      private Database(String dbPath) throws Exception {
-    	 dbDir = new File("./db/");
+    	 dbDir = new File(dbPath);
     	 if (!dbDir.isDirectory()) {
     		 throw new Exception("Cannot find database at: " + dbDir.getAbsolutePath());
     	 }

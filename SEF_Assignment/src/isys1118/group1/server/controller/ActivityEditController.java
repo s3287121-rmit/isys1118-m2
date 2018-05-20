@@ -3,7 +3,7 @@ package isys1118.group1.server.controller;
 import isys1118.group1.server.database.Database;
 import isys1118.group1.server.database.Row;
 import isys1118.group1.server.database.Table;
-import isys1118.group1.shared.model.ActivityEditModel;
+import isys1118.group1.server.model.ActivityEditModel;
 import isys1118.group1.shared.view.ActivityEditView;
 import isys1118.group1.shared.view.View;
 

@@ -7,7 +7,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import isys1118.group1.client.handlers.ControllerLink;
-import isys1118.group1.shared.model.Model;
 
 public class ActivityView extends View {
 	
@@ -20,9 +19,10 @@ public class ActivityView extends View {
 	private String startTime;
 	private String duration;
 	private String casual;
+	private String casualPrice;
 
 	@Override
-	public void setView(Model model) {}
+	public void setView() {}
 
 	public void setActivityId(String activityId) {
 		this.activityId = activityId;
@@ -59,6 +59,10 @@ public class ActivityView extends View {
 	public void setCasual(String casual) {
 		this.casual = casual;
 	}
+	
+	public void setCasualPrice(String casualPrice) {
+		this.casualPrice = casualPrice;
+	}
 
 	@Override
 	public void show() {
@@ -83,6 +87,12 @@ public class ActivityView extends View {
 		vp.add(new HTML("<p>Time: " + day + " " + startTime + " (" + duration + ")" + "</p>"));
 		HTML casualLink = new HTML("<p>Assigned Casual: " + casual + "</p>");
 		vp.add(casualLink);
+		
+		// optional casual price
+		if (casual != null && !casual.isEmpty() &&
+				casualPrice != null && !casualPrice.isEmpty()) {
+			vp.add(new HTML("<p>Cost of casual: $" + casualPrice + "</p>"));
+		}
 		
 		// edit button
 		Button edit = new Button("Edit");

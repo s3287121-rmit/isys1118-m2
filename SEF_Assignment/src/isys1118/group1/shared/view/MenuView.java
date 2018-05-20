@@ -6,7 +6,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import isys1118.group1.client.handlers.ControllerLink;
 import isys1118.group1.client.handlers.ResetDatabaseHandler;
-import isys1118.group1.shared.model.Model;
 
 public class MenuView extends View {
 	
@@ -20,7 +19,7 @@ public class MenuView extends View {
 	private String[][] options;
 
 	@Override
-	public void setView(Model model) {
+	public void setView() {
 		
 		// options
 		options = new String[3][3];
@@ -37,9 +36,11 @@ public class MenuView extends View {
 		options[2][1] = "102";
 		options[2][2] = "Test Activity";
 		
+		/*
 		options[3][0] = "courselist";
 		options[3][1] = "reset";
 		options[3][2] = "Reset Database";
+		*/
 		
 	}
 
@@ -60,7 +61,7 @@ public class MenuView extends View {
 		// options
 		VerticalPanel optionPanel = new VerticalPanel();
 		vp.add(optionPanel);
-		for (String[] optionSingle: options) {
+		for (String[] optionSingle : options) {
 			HTML anOption = new HTML(optionSingle[2]);
 			if (optionSingle[1].equals("reset")) {
 				anOption.addClickHandler(new ResetDatabaseHandler(optionSingle[0], optionSingle[1]));

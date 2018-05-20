@@ -3,7 +3,7 @@ package isys1118.group1.server.controller;
 import isys1118.group1.server.database.Database;
 import isys1118.group1.server.database.Row;
 import isys1118.group1.server.database.Table;
-import isys1118.group1.shared.model.ActivityModel;
+import isys1118.group1.server.model.ActivityModel;
 import isys1118.group1.shared.view.ActivityView;
 import isys1118.group1.shared.view.View;
 
@@ -23,6 +23,7 @@ public class ActivityController extends Controller {
 			Row row = fullTable.getRowEquals("activityid", model.getActivityId());
 			if (row != null) {
 				model.setActivityFromRow(row);
+				model.setCasualCost();
 				view.setActivityId(model.getActivityId());
 				view.setTitle("Activity");
 				view.setCourseId(model.getViewCourseId());
@@ -32,6 +33,7 @@ public class ActivityController extends Controller {
 				view.setStartTime(model.getViewTime());
 				view.setDuration(model.getViewDuration());
 				view.setCasual(model.getViewAssignedCasual());
+				view.setCasualPrice(model.getViewCost());
 			}
 			else {
 				// TODO show 404 page.

@@ -1,11 +1,11 @@
-package isys1118.group1.shared.model;
+package isys1118.group1.server.model;
 
 import java.util.ArrayList;
 
 import isys1118.group1.server.database.Database;
 import isys1118.group1.server.database.Row;
 import isys1118.group1.server.database.Table;
-import isys1118.group1.server.Course;
+import isys1118.group1.server.helpers.Course;
 
 public class CourseListModel extends Model {
 	

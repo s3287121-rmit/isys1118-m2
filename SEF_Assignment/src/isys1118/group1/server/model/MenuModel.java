@@ -1,4 +1,4 @@
-package isys1118.group1.shared.model;
+package isys1118.group1.server.model;
 
 import java.util.Random;
 

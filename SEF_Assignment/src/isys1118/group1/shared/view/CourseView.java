@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import isys1118.group1.client.handlers.ControllerLink;
 import isys1118.group1.client.handlers.CourseStatusHandler;
 import isys1118.group1.client.handlers.CreateActivityHandler;
-import isys1118.group1.shared.model.Model;
 
 public class CourseView extends View {
 	
@@ -34,11 +33,13 @@ public class CourseView extends View {
 	 */
 	private String[][] activities;
 	private String budget;
+	private String cost;
+	private boolean overpriced;
 	
 	private int approvalStatus;
 
 	@Override
-	public void setView(Model model) {}
+	public void setView() {}
 
 	public void setCourseId(String courseId) {
 		this.courseId = courseId;
@@ -62,6 +63,14 @@ public class CourseView extends View {
 
 	public void setApprovalStatus(int approvalStatus) {
 		this.approvalStatus = approvalStatus;
+	}
+
+	public void setCost(String cost) {
+		this.cost = cost;
+	}
+
+	public void setOverpriced(boolean overpriced) {
+		this.overpriced = overpriced;
 	}
 
 	@Override
@@ -124,8 +133,13 @@ public class CourseView extends View {
 		
 		// budget
 		HTML budgetHeader = new HTML("<h2>Budget</h2>");
-		HTML budgetAmount = new HTML("<p>" + budget + "</p>");
+		HTML costAmount = new HTML("<p>Total Cost of Casuals: " + cost + "</p>");
+		if (overpriced) {
+			costAmount.addStyleName("overpriced");
+		}
+		HTML budgetAmount = new HTML("<p>Allowed Budget: " + budget + "</p>");
 		vp.add(budgetHeader);
+		vp.add(costAmount);
 		vp.add(budgetAmount);
 		
 		// status

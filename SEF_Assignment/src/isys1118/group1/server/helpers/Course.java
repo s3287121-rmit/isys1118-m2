@@ -1,4 +1,4 @@
-package isys1118.group1.server;
+package isys1118.group1.server.helpers;
 
 import java.io.Serializable;
 
@@ -14,6 +14,8 @@ public class Course implements Serializable {
 	private int totalBudgetCents;
 	private String coordinatorId;
 	private String status;
+	private String cost;
+	private boolean overpriced = false;
 	
 	public void setFromRow(Row r) {
 		this.courseId = r.get("courseid");
@@ -93,6 +95,22 @@ public class Course implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getCost() {
+		return cost;
+	}
+
+	public void setCost(String cost) {
+		this.cost = cost;
+	}
+
+	public boolean isOverpriced() {
+		return overpriced;
+	}
+
+	public void setOverpriced(boolean overpriced) {
+		this.overpriced = overpriced;
 	}
 
 }

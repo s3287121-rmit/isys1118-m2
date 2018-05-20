@@ -3,13 +3,11 @@ package isys1118.group1.shared.view;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import isys1118.group1.shared.model.Model;
-
 public abstract class View implements IsSerializable {
 	
 	public View() {}
 	
-	public abstract void setView(Model model);
+	public abstract void setView();
 	
 	public abstract void show();
 	

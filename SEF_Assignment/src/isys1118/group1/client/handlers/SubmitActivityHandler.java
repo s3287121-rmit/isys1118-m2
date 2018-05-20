@@ -10,9 +10,9 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import isys1118.group1.client.LogClient;
 import isys1118.group1.client.SubmitActivityService;
 import isys1118.group1.client.SubmitActivityServiceAsync;
+import isys1118.group1.client.helpers.LogClient;
 import isys1118.group1.shared.EditActivityInputs;
 import isys1118.group1.shared.ValidateActivityInput;
 

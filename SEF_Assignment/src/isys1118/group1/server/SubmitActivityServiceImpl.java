@@ -6,6 +6,7 @@ import isys1118.group1.client.SubmitActivityService;
 import isys1118.group1.server.database.Database;
 import isys1118.group1.server.database.Row;
 import isys1118.group1.server.database.Table;
+import isys1118.group1.server.helpers.ValidateCasualInput;
 import isys1118.group1.shared.EditActivityInputs;
 
 @SuppressWarnings("serial")

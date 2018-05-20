@@ -1,9 +1,9 @@
-package isys1118.group1.shared.model;
+package isys1118.group1.server.model;
 
-import isys1118.group1.server.Activity;
 import isys1118.group1.server.database.Database;
 import isys1118.group1.server.database.Row;
 import isys1118.group1.server.database.Table;
+import isys1118.group1.server.helpers.Activity;
 
 public class ActivityEditModel extends Model {
 	

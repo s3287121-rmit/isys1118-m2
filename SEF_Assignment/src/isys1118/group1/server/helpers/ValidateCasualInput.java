@@ -1,4 +1,4 @@
-package isys1118.group1.server;
+package isys1118.group1.server.helpers;
 
 import java.util.ArrayList;
 
@@ -50,7 +50,7 @@ public class ValidateCasualInput {
 			int timeHInt = Integer.valueOf(timeh);
 			int timeMInt = Integer.valueOf(timem);
 			int durMInt = Integer.valueOf(durm);
-			String casualError = checkCasualConflict(casual, activityId, timeHInt, timeMInt, durMInt);
+			String casualError = checkCasualConflict(casual, activityId, day, timeHInt, timeMInt, durMInt);
 			if (casualError != null && !casualError.isEmpty()) {
 				errors.add(casualError);
 			}
@@ -83,7 +83,7 @@ public class ValidateCasualInput {
 	
 	public static String checkCasualConflict(
 			String casual, String activityId,
-			int starth, int startm, int durationm) {
+			String day, int starth, int startm, int durationm) {
 		
 		// check if data has been entered. If there is no casual data, we don't
 		// need to validate.
@@ -119,13 +119,16 @@ public class ValidateCasualInput {
 				// check to see if there is an overlap with any of the user's
 				// other activities
 				if (actRow != null) {
-					int actTimeH = Integer.valueOf(actRow.get("timeh"));
-					int actTimeM = Integer.valueOf(actRow.get("timem"));
-					int actDurationM = Integer.valueOf(actRow.get("durationm"));
-					if (timeRangeInTimeRange(
-							actTimeH, actTimeM, actDurationM,
-							starth, startm, durationm)) {
-						return "casual.clash=" + actRow.get("activityid");
+					String day0 = actRow.get("day");
+					if (day.equalsIgnoreCase(day0)) {
+						int actTimeH = Integer.valueOf(actRow.get("timeh"));
+						int actTimeM = Integer.valueOf(actRow.get("timem"));
+						int actDurationM = Integer.valueOf(actRow.get("durationm"));
+						if (timeRangeInTimeRange(
+								actTimeH, actTimeM, actDurationM,
+								starth, startm, durationm)) {
+							return "casual.clash=" + actRow.get("activityid");
+						}
 					}
 				}
 			}
@@ -141,8 +144,8 @@ public class ValidateCasualInput {
 	private static boolean pointInTimeRange(
 			int startHour, int startMinute, int duration,
 			int pointHour, int pointMinute) {
-		int increaseHours = duration / 60;
-		int increaseMinutes = duration % 60;
+		int increaseHours = (duration - 1) / 60;
+		int increaseMinutes = (duration - 1) % 60;
 		int endHour = startHour + increaseHours;
 		int endMinute = startMinute + increaseMinutes;
 		if (

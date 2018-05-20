@@ -19,8 +19,8 @@
 
   <!-- Other module inherits                                      -->
   <inherits name="com.google.gwt.logging.Logging"/>
-  <inherits name="com.google.gwt.json.JSON"/>
-  <inherits name="javax.validation.Validation"/>
+  <!-- inherits name="com.google.gwt.json.JSON"/ -->
+  <!-- inherits name="javax.validation.Validation"/ -->
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='isys1118.group1.client.SEF_Assignment'/>

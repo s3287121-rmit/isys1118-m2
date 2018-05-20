@@ -1,7 +1,6 @@
 package isys1118.group1.server;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
@@ -30,7 +29,11 @@ public class MenuServiceImpl extends RemoteServiceServlet implements MenuService
 	public ViewSerial resetDatabase(String name, String id) throws Exception {
 		
 		File dbDir = Database.getDatabase().dbDir;
-		File backupDir = new File(dbDir, "/.backup/");
+		File backupDir = new File(dbDir, "/backup");
+		System.out.println("Copying files from '" + backupDir.getCanonicalPath() + "; to '" + dbDir.getAbsolutePath() + "'");
+		if (!backupDir.isDirectory()) {
+			throw new Exception("Couldn't find backup directory!");
+		}
 		File[] toDelete = dbDir.listFiles();
 		
 		// delete all current files

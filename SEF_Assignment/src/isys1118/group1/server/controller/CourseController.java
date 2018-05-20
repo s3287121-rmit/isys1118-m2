@@ -3,7 +3,7 @@ package isys1118.group1.server.controller;
 import isys1118.group1.server.database.Database;
 import isys1118.group1.server.database.Row;
 import isys1118.group1.server.database.Table;
-import isys1118.group1.shared.model.CourseModel;
+import isys1118.group1.server.model.CourseModel;
 import isys1118.group1.shared.view.CourseView;
 import isys1118.group1.shared.view.View;
 
@@ -30,6 +30,8 @@ public class CourseController extends Controller {
 				view.setActivities(model.getViewActivities());
 				view.setBudget(model.getViewBudget());
 				view.setApprovalStatus(model.getViewStatus());
+				view.setCost(model.getViewCost());
+				view.setOverpriced(model.getViewOverpriced());
 			}
 			else {
 				// TODO show 404 page.

@@ -1,9 +1,11 @@
 package isys1118.group1.server;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import isys1118.group1.server.controller.MenuController;
+import isys1118.group1.server.database.Database;
 import isys1118.group1.server.session.Session;
 
 public class ServerConfig implements ServletContextListener {
@@ -18,6 +20,13 @@ public class ServerConfig implements ServletContextListener {
 		Session.createSession();
 		MenuController mc = new MenuController();
 		Session.sessionInst.setMenu(mc);
+		ServletContext context = arg0.getServletContext();
+		String pathToDB = context.getRealPath("/db/");
+		try {
+			Database.connectToDatabase(pathToDB);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

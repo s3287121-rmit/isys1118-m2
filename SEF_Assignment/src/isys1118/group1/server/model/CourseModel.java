@@ -1,13 +1,15 @@
-package isys1118.group1.shared.model;
+package isys1118.group1.server.model;
 
 import java.util.ArrayList;
 
 import isys1118.group1.server.database.Database;
 import isys1118.group1.server.database.Row;
 import isys1118.group1.server.database.Table;
+import isys1118.group1.server.helpers.Activity;
+import isys1118.group1.server.helpers.CasualPriceCalculator;
+import isys1118.group1.server.helpers.Cost;
+import isys1118.group1.server.helpers.Course;
 import isys1118.group1.shared.view.CourseView;
-import isys1118.group1.server.Activity;
-import isys1118.group1.server.Course;
 
 public class CourseModel extends Model {
 	
@@ -41,6 +43,16 @@ public class CourseModel extends Model {
 			activityLoadError = true;
 			e.printStackTrace();
 		}
+
+		// set cost
+		Cost cost = CasualPriceCalculator.costOfAllActivities(courseId);
+		course.setCost(cost.getPriceStr());
+		if (
+				cost.dollars > course.getTotalBudgetDollars() ||
+				(cost.dollars == course.getTotalBudgetDollars() && cost.cents > course.getTotalBudgetCents())) {
+			course.setOverpriced(true);
+		}
+		
 	}
 	
 	public Course getCourse() {
@@ -110,6 +122,14 @@ public class CourseModel extends Model {
 		else {
 			return 0;
 		}
+	}
+	
+	public String getViewCost() {
+		return course.getCost();
+	}
+	
+	public boolean getViewOverpriced() {
+		return course.isOverpriced();
 	}
 
 }

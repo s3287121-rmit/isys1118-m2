@@ -1,6 +1,6 @@
 package isys1118.group1.server.controller;
 
-import isys1118.group1.shared.model.CourseListModel;
+import isys1118.group1.server.model.CourseListModel;
 import isys1118.group1.shared.view.CourseListView;
 import isys1118.group1.shared.view.View;
 

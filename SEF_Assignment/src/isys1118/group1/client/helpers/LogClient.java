@@ -1,4 +1,4 @@
-package isys1118.group1.client;
+package isys1118.group1.client.helpers;
 
 import java.util.Date;
 import java.util.logging.Formatter;
