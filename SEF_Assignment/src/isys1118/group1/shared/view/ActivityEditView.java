@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import isys1118.group1.client.handlers.ControllerLink;
 import isys1118.group1.client.handlers.SubmitActivityHandler;
+import isys1118.group1.client.helpers.CasualModal;
 
 public class ActivityEditView extends View {
 	
@@ -178,8 +179,6 @@ public class ActivityEditView extends View {
 		casualHP.add(casualError);
 		vp.add(casualHP);
 		
-		// TODO casualPopup handler
-		
 		// submit and cancel buttons
 		HorizontalPanel buttonPanel = new HorizontalPanel();
 		buttonPanel.addStyleName("right-align");
@@ -190,6 +189,9 @@ public class ActivityEditView extends View {
 		buttonPanel.add(cancelButton);
 		buttonPanel.add(submitButton);
 		vp.add(buttonPanel);
+		
+		// TODO casualPopup handler
+		CasualModal casualModal = new CasualModal(casualId, courseId, activityId);
 		
 	}
 
