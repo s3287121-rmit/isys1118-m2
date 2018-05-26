@@ -22,38 +22,38 @@ public class ValidateCasualInput {
 		ArrayList<String> errors = new ArrayList<String>();
 		
 		// check type
-			if (!ValidateActivityInput.checkType(type)) {
-				errors.add("type");
-			}
-			
-			// check day
-			if (!ValidateActivityInput.checkDay(day)) {
-				errors.add("day");
-			}
-			
-			// check timeh
-			if (!ValidateActivityInput.checkTimeH(timeh)) {
-				errors.add("timeh");
-			}
-			
-			// check timem
-			if (!ValidateActivityInput.checkTimeM(timem)) {
-				errors.add("timem");
-			}
-			
-			// check durm
-			if (!ValidateActivityInput.checkDuration(durm)) {
-				errors.add("durm");
-			}
-			
-			// check casual
-			int timeHInt = Integer.valueOf(timeh);
-			int timeMInt = Integer.valueOf(timem);
-			int durMInt = Integer.valueOf(durm);
-			String casualError = checkCasualConflict(casual, activityId, day, timeHInt, timeMInt, durMInt);
-			if (casualError != null && !casualError.isEmpty()) {
-				errors.add(casualError);
-			}
+		if (!ValidateActivityInput.checkType(type)) {
+			errors.add("type");
+		}
+		
+		// check day
+		if (!ValidateActivityInput.checkDay(day)) {
+			errors.add("day");
+		}
+		
+		// check timeh
+		if (!ValidateActivityInput.checkTimeH(timeh)) {
+			errors.add("timeh");
+		}
+		
+		// check timem
+		if (!ValidateActivityInput.checkTimeM(timem)) {
+			errors.add("timem");
+		}
+		
+		// check durm
+		if (!ValidateActivityInput.checkDuration(durm)) {
+			errors.add("durm");
+		}
+		
+		// check casual
+		int timeHInt = Integer.valueOf(timeh);
+		int timeMInt = Integer.valueOf(timem);
+		int durMInt = Integer.valueOf(durm);
+		String casualError = checkCasualConflict(casual, activityId, day, timeHInt, timeMInt, durMInt);
+		if (casualError != null && !casualError.isEmpty()) {
+			errors.add(casualError);
+		}
 		
 		return errors.size() == 0 ? null : errors.toArray(new String[errors.size()]);
 	}
@@ -110,7 +110,9 @@ public class ValidateCasualInput {
 				// do not compare to the current activity. This is pointless.
 				// Note that this will occur when resubmitting an activity with
 				// an existing registered user.
-				if (thisAct.get("activityid").equals(assignRow.get("activityid"))) {
+				if (
+						thisAct != null &&
+						thisAct.get("activityid").equals(assignRow.get("activityid"))) {
 					continue;
 				}
 				
@@ -144,13 +146,12 @@ public class ValidateCasualInput {
 	private static boolean pointInTimeRange(
 			int startHour, int startMinute, int duration,
 			int pointHour, int pointMinute) {
-		int increaseHours = (duration - 1) / 60;
-		int increaseMinutes = (duration - 1) % 60;
-		int endHour = startHour + increaseHours;
-		int endMinute = startMinute + increaseMinutes;
+		int startInMinutes = startHour * 60 + startMinute;
+		int endInMinutes = startHour * 60 + startMinute + duration - 1;
+		int pointInMinutes = pointHour * 60 + pointMinute;
 		if (
-				(pointHour >= startHour && pointMinute >= startMinute) &&
-				(pointHour <= endHour && pointMinute <= endMinute)) {
+				pointInMinutes >= startInMinutes &&
+				pointInMinutes <= endInMinutes) {
 			return true;
 		}
 		return false;

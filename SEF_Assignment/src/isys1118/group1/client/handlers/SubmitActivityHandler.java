@@ -67,7 +67,7 @@ public class SubmitActivityHandler implements ClickHandler {
 			}
 		}
 		
-		// TODO no major errors so send to server for validation
+		// no major errors so send to server for validation
 		sasa = GWT.create(SubmitActivityService.class);
 		EditActivityInputs eai = EditActivityInputs.createClient(
 				typeStr,

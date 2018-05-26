@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.SubmitButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import isys1118.group1.client.handlers.CasualPopupShower;
 import isys1118.group1.client.handlers.ControllerLink;
 import isys1118.group1.client.handlers.SubmitActivityHandler;
 import isys1118.group1.client.helpers.CasualModal;
@@ -74,10 +75,23 @@ public class ActivityEditView extends View {
 		this.casualName = casualName;
 	}
 
+	public String getActivityId() {
+		return activityId;
+	}
+
+	public String getCourseId() {
+		return courseId;
+	}
+
+	public String getCasualId() {
+		return casualId;
+	}
+
 	@Override
 	public void show() {
 		final RootPanel title = RootPanel.get("title");
 		final RootPanel content = RootPanel.get("content");
+		final RootPanel popup = RootPanel.get("popup");
 		
 		// set up all strings -- this accounts for null and unset values
 		String courseStr = this.courseId + " " + this.courseName;
@@ -87,6 +101,10 @@ public class ActivityEditView extends View {
 		String startTimeMStr = this.startTimeM == -1 ? "" : String.valueOf(this.startTimeM);
 		String durationMStr = this.durationM == -1 ? "" : String.valueOf(this.durationM);
 		String casualStr = this.casualId == null ? "" : this.casualId + " " + this.casualName;
+		
+		// set up casual popup
+		CasualModal casualModal = new CasualModal(casualId, this);
+		popup.add(casualModal);
 		
 		// clear screen
 		clearMain();
@@ -168,11 +186,18 @@ public class ActivityEditView extends View {
 		HorizontalPanel casualHP = new HorizontalPanel();
 		HTML casualLabel = new HTML("<P>Casual: </p>");
 		casualHP.add(casualLabel);
+		
 		TextBox casualBox = new TextBox();
 		casualBox.getElement().setId("edit-casual");
 		casualBox.setValue(casualStr);
 		casualBox.setEnabled(false);
 		casualHP.add(casualBox);
+		
+		Button casualSelect = new Button("Change");
+		casualSelect.addStyleName("edit-casual-select");
+		casualSelect.addClickHandler(new CasualPopupShower(this, casualModal));
+		casualHP.add(casualSelect);
+		
 		HTML casualError = new HTML();
 		casualError.getElement().setId("edit-casual-error");
 		casualError.addStyleName("form-error");
@@ -189,9 +214,6 @@ public class ActivityEditView extends View {
 		buttonPanel.add(cancelButton);
 		buttonPanel.add(submitButton);
 		vp.add(buttonPanel);
-		
-		// TODO casualPopup handler
-		CasualModal casualModal = new CasualModal(casualId, courseId, activityId);
 		
 	}
 

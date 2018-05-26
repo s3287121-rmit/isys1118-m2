@@ -43,13 +43,18 @@ public class SubmitActivityServiceImpl extends RemoteServiceServlet implements S
 			String[] casualData = inputs.casual.split(" ");
 			
 			// create new assignment if one does not already exist.
-			Table allAssignments = Database.getDatabase().getFullTable("assignments");
+			Table allAssignments
+			= Database.getDatabase().getFullTable("assignments");
 			Row checkAlreadyExists = allAssignments.getRowEquals(
-					new String[] {"userid", "activityid"},
-					new String[] {casualData[0], activityId});
+					"activityid", activityId);
 			if (checkAlreadyExists == null) {
-				System.out.println("No assingment row with userid=" + casualData[0] + " and activityid=" + activityId);
+				System.out.println("New Assignment added for userid=" + casualData[0] + " and activityid=" + activityId);
 				allAssignments.createNewRow(new String[] {casualData[0], activityId});
+				allAssignments.commitChanges();
+			}
+			// otherwise just update
+			else {
+				checkAlreadyExists.setColumn("userid", casualData[0]);
 				allAssignments.commitChanges();
 			}
 			
