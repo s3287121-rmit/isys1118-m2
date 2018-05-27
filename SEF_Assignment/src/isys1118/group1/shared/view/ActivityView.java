@@ -101,12 +101,14 @@ public class ActivityView extends View {
 		content.add(vp);
 		
 		// details
-		HTML courseLink = new HTML("<p>Course: " + courseId + " " + courseName + "</p>");
+		HTML courseLink = new HTML("<p>Course: " + courseId + " " +
+				courseName + "</p>");
 		courseLink.addClickHandler(new ControllerLink("course", courseId));
 		courseLink.addStyleName("pretty-link");
 		vp.add(courseLink);
 		vp.add(new HTML("<p>Type: " + type + "</p>"));
-		vp.add(new HTML("<p>Time: " + day + " " + startTime + " (" + duration + ")" + "</p>"));
+		vp.add(new HTML("<p>Time: " + day + " " + startTime +
+				" (" + duration + ")" + "</p>"));
 		
 		// casual details
 		HTML casualLink = new HTML("<p>Assigned Casual: " + casual + "</p>");
