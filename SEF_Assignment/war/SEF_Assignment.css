@@ -1,23 +1,10 @@
-/** Add css rules here for your application. */
-
-
-/** Example rules used by the template application (remove for your app) */
+/** No longer in use
 h1 {
   font-size: 2em;
   font-weight: bold;
   color: #777777;
   margin: 40px 0px 70px;
   text-align: center;
-}
-
-.sendButton {
-  display: block;
-  font-size: 16pt;
-}
-
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
 }
 
 .dialogVPanel {
@@ -28,11 +15,17 @@ h1 {
   color: red;
 }
 
-/** Set ids using widget.getElement().setId("idOfElement") */
 #closeButton {
   margin: 15px 6px 6px;
 }
+*/
 
+.sendButton {
+  display: block;
+  font-size: 16pt;
+}
+
+/** Set ids using widget.getElement().setId("idOfElement") */
 #menu {
   width: 250px;
   padding: 150px 10px 10px 10px;
@@ -78,20 +71,24 @@ div {
   margin-bottom: 5px;
 }
 
-.card-third-line, .card-half-line, .card-simple-line {
+.card-line {
+  min-width: 200px;
+}
+
+.card-line td {
+  min-width: 200px;
+}
+
+.full-card-line {
   width: 100%;
 }
 
-.card-third-line td {
-  min-width: 20%;
-}
-
-.card-half-line td {
-  min-width: 40%;
+.full-card-line td {
+  min-width: 200px;
 }
 
 .right-align {
-	float: right;
+  float: right;
 }
 
 .card:hover, .pretty-link:hover {
@@ -110,19 +107,10 @@ div {
   width: 800px;
 }
 
-.no-overflow {
-  overflow: hidden;
-}
-
-.rejected, .overpriced {
+.invalid-result {
 	color: red;
 }
 
 #message, #popup {
 	visibility: hidden;
-}
-
-.form-error {
-	color: red;
-	display: none;
 }

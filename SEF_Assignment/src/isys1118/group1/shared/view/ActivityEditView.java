@@ -111,7 +111,7 @@ public class ActivityEditView extends View {
 		typeHP.add(typeBox);
 		HTML typeError = new HTML();
 		typeError.getElement().setId("edit-type-error");
-		typeError.addStyleName("form-error");
+		typeError.addStyleName("invalid-result");
 		typeHP.add(typeError);
 		vp.add(typeHP);
 
@@ -125,7 +125,7 @@ public class ActivityEditView extends View {
 		dayHP.add(dayBox);
 		HTML dayError = new HTML();
 		dayError.getElement().setId("edit-day-error");
-		dayError.addStyleName("form-error");
+		dayError.addStyleName("invalid-result");
 		dayHP.add(dayError);
 		vp.add(dayHP);
 		
@@ -145,7 +145,7 @@ public class ActivityEditView extends View {
 		timeHP.add(timeBoxM);
 		HTML timeError = new HTML();
 		timeError.getElement().setId("edit-timestart-error");
-		timeError.addStyleName("form-error");
+		timeError.addStyleName("invalid-result");
 		timeHP.add(timeError);
 		vp.add(timeHP);
 		
@@ -159,7 +159,7 @@ public class ActivityEditView extends View {
 		durationHP.add(durBox);
 		HTML durationError = new HTML();
 		durationError.getElement().setId("edit-durationm-error");
-		durationError.addStyleName("form-error");
+		durationError.addStyleName("invalid-result");
 		durationHP.add(durationError);
 		vp.add(durationHP);
 
@@ -174,7 +174,7 @@ public class ActivityEditView extends View {
 		casualHP.add(casualBox);
 		HTML casualError = new HTML();
 		casualError.getElement().setId("edit-casual-error");
-		casualError.addStyleName("form-error");
+		casualError.addStyleName("invalid-result");
 		casualHP.add(casualError);
 		vp.add(casualHP);
 		

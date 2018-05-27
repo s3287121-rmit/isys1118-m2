@@ -57,7 +57,7 @@ public class CourseListView extends View {
 			courseCard.addStyleName("card");
 			
 			HorizontalPanel topLine = new HorizontalPanel();
-			topLine.addStyleName("card-half-line");
+			topLine.addStyleName("card-line");
 			HTML topLineId = new HTML("<p>" + courseSingle[0] + "</p>");
 			topLine.add(topLineId);
 			HTML topLineName = new HTML("<p>" + courseSingle[1] + "</p>");
@@ -65,7 +65,7 @@ public class CourseListView extends View {
 			courseCard.add(topLine);
 			
 			HorizontalPanel bottomLine = new HorizontalPanel();
-			bottomLine.addStyleName("card-simple-line");
+			bottomLine.addStyleName("full-card-line");
 			HTML bottomLineDesc = new HTML("<p>" + courseSingle[2] + "</p>");
 			bottomLine.add(bottomLineDesc);
 			HTML bottomLineStatus = new HTML("<p>" + courseSingle[3] + "</p>");

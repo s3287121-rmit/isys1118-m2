@@ -108,12 +108,13 @@ public class CourseView extends View {
 			wrapper.add(actCard);
 			
 			HorizontalPanel topLine = new HorizontalPanel();
-			topLine.addStyleName("card-third-line");
+			topLine.addStyleName("full-card-line");
 			HTML topLineType = new HTML("<p>" + actSingle[1] + "</p>");
 			topLine.add(topLineType);
 			HTML topLineDay = new HTML("<p>" + actSingle[2] + "</p>");
 			topLine.add(topLineDay);
 			HTML topLineTime = new HTML("<p>" + actSingle[3] + "</p>");
+			topLineTime.addStyleName("right-align");
 			topLine.add(topLineTime);
 			actCard.add(topLine);
 			
@@ -135,7 +136,7 @@ public class CourseView extends View {
 		HTML budgetHeader = new HTML("<h2>Budget</h2>");
 		HTML costAmount = new HTML("<p>Total Cost of Casuals: " + cost + "</p>");
 		if (overpriced) {
-			costAmount.addStyleName("overpriced");
+			costAmount.addStyleName("invalid-result");
 		}
 		HTML budgetAmount = new HTML("<p>Allowed Budget: " + budget + "</p>");
 		vp.add(budgetHeader);
@@ -149,7 +150,7 @@ public class CourseView extends View {
 		vp.add(status);
 		if (approvalStatus == APPROVAL_REJECTED) {
 			HTML recentRejection = new HTML("<p>NOTE: This course was recently rejected. Please update and resend.</p>");
-			recentRejection.addStyleName("rejected");
+			recentRejection.addStyleName("invalid-result");
 			vp.add(recentRejection);
 		}
 		if (approvalStatus == APPROVAL_EDITING ||
