@@ -6,8 +6,8 @@ import isys1118.group1.shared.CasualInfo;
 
 public interface UpdateCasualServiceAsync {
 	
-	public void getCasualInfo(String casualId, String courseId,
-			String activityId, AsyncCallback<CasualInfo> callback);
+	public void getCasualInfo(String casualId,
+			AsyncCallback<CasualInfo> callback);
 	
 	public void getAllAvailableCasuals(String currentCasId, String courseId,
 			String activityId, String day, String starth, String startm,

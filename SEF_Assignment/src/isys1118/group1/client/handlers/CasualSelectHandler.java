@@ -40,8 +40,6 @@ public class CasualSelectHandler implements ClickHandler {
 		ucsa = GWT.create(UpdateCasualService.class);
 		ucsa.getCasualInfo(
 				modal.getSelectedCasual().getCasualId(),
-				activityEdit.getCourseId(),
-				activityEdit.getActivityId(),
 				new AsyncCallback<CasualInfo>() {
 
 					@Override

@@ -16,7 +16,7 @@ import isys1118.group1.shared.ValidateActivityInput;
 public class UpdateCasualServiceImpl extends RemoteServiceServlet implements UpdateCasualService {
 
 	@Override
-	public CasualInfo getCasualInfo(String casualId, String courseId, String activityId) {
+	public CasualInfo getCasualInfo(String casualId) {
 		
 		if (casualId == null || casualId.isEmpty()) {
 			return CasualInfo.create(null, null, null, null, null, true);
@@ -34,7 +34,7 @@ public class UpdateCasualServiceImpl extends RemoteServiceServlet implements Upd
 			// get casual info
 			Row thisCasual = casuals.getRowEquals("userid", casualId);
 			if (thisCasual == null) {
-				return null;
+				return CasualInfo.create(null, null, null, null, null, true);
 			}
 			id = thisCasual.get("userid");
 			name = thisCasual.get("name");
@@ -43,7 +43,7 @@ public class UpdateCasualServiceImpl extends RemoteServiceServlet implements Upd
 			// get casual courses
 			ArrayList<Row> thisDetails = casualDetails.getRowsEqual("userid", casualId);
 			if (thisDetails.isEmpty()) {
-				return null;
+				return CasualInfo.create(id, name, rate, null, null, false);
 			}
 			courses = new String[thisDetails.size()];
 			for (int i = 0; i < thisDetails.size(); i++) {

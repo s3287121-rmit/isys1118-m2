@@ -143,6 +143,11 @@ public class CasualModal extends DialogBox {
 	 */
 	private CasualSelect selectedCasual = null;
 	
+	/**
+	 * This modal can only be viewed. Editing is not allowed.
+	 */
+	public final boolean viewOnly;
+	
 	public CasualModal(String casualId, ActivityEditView eav) {
 		super(true, true);
 		hide();
@@ -150,6 +155,18 @@ public class CasualModal extends DialogBox {
 		this.activityEdit = eav;
 		this.selectedCasual = null;
 		createInnerHtml();
+		this.viewOnly = false;
+	}
+	
+	public CasualModal(String casualId, ActivityEditView eav,
+			boolean viewOnly) {
+		super(true, true);
+		hide();
+		this.casualId = casualId;
+		this.activityEdit = eav;
+		this.selectedCasual = null;
+		createInnerHtml();
+		this.viewOnly = viewOnly;
 	}
 	
 	/**
@@ -207,14 +224,19 @@ public class CasualModal extends DialogBox {
 			String userRate, String[] userCourses) {
 		clearContent();
 		
+		// set title first
+		title.setHTML("<h2>Assigned Casual</h2>");
+		
 		VerticalPanel vp = new VerticalPanel();
 		selectedCasual = null;
 		
-		// Select button --  takes to casual list
-		Button selectDifferent = new Button("Select Casual");
-		selectDifferent.addClickHandler(
-				new CasualListHandler(activityEdit, this));
-		vp.add(selectDifferent);
+		// Select button -- takes to casual list -- edit only
+		if (!viewOnly) {
+			Button selectDifferent = new Button("Select Casual");
+			selectDifferent.addClickHandler(
+					new CasualListHandler(activityEdit, this));
+			vp.add(selectDifferent);
+		}
 		
 		// there is no casual listed!
 		if (userId != null) {
@@ -234,23 +256,25 @@ public class CasualModal extends DialogBox {
 			
 			if (userCourses == null || userCourses.length == 0) {
 				HTML noCourses = new HTML("<p>None!</p>");
-				noCourses.addStyleName("casual-assigned-course");
 				vp.add(noCourses);
 			}
 			else {
 				VerticalPanel courseList = new VerticalPanel();
 				for (String s : userCourses) {
 					HTML toAdd = new HTML("<p>" + s + "</p>");
+					toAdd.addStyleName("casual-assigned-course");
 					courseList.add(toAdd);
 				}
 				vp.add(courseList);
 			}
 			
 			// confirm button
-			Button confirm = new Button("Confirm Casual");
-			confirm.addClickHandler(
-					new CasualConfirmHandler(activityEdit, this));
-			vp.add(confirm);
+			if (!viewOnly) {
+				Button confirm = new Button("Confirm Casual");
+				confirm.addClickHandler(
+						new CasualConfirmHandler(activityEdit, this));
+				vp.add(confirm);
+			}
 			
 		}
 		else {
@@ -264,6 +288,9 @@ public class CasualModal extends DialogBox {
 	
 	public void showAllCasuals(CasualInfo[] allCasuals) {
 		clearContent();
+		
+		// set title first
+		title.setHTML("<h2>Choose a Casual</h2>");
 		
 		VerticalPanel vp = new VerticalPanel();
 		selectedCasual = null;
@@ -295,6 +322,7 @@ public class CasualModal extends DialogBox {
 	}
 	
 	public void clearContent() {
+		title.setHTML("");
 		content.clear();
 	}
 	

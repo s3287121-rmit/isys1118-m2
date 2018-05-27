@@ -10,23 +10,33 @@ import isys1118.group1.server.controller.ActivityEditController;
 import isys1118.group1.server.controller.Controller;
 import isys1118.group1.server.controller.CourseController;
 import isys1118.group1.server.controller.CourseListController;
-import isys1118.group1.server.controller.MenuController;
 import isys1118.group1.server.database.Database;
 import isys1118.group1.server.database.Row;
 import isys1118.group1.server.database.Table;
 import isys1118.group1.server.session.Session;
+import isys1118.group1.shared.error.PermissionException;
 import isys1118.group1.shared.view.ViewSerial;
 
 @SuppressWarnings("serial")
 public class ChangeControllerServiceImpl extends RemoteServiceServlet implements ChangeControllerService {
 
 	@Override
-	public ViewSerial changeController(String name, String id) throws Exception {
+	public ViewSerial changeController(String name, String id) throws Exception, PermissionException {
 		
 		// type == Course
 		Controller toSet = null;
 		if (name.equals("course")) {
-			toSet = new CourseController(id);
+			if (hasPermissionCourse(id)) {
+				toSet = new CourseController(id);
+			}
+			else {
+				PermissionException pe = new PermissionException();
+				pe.set(
+						Session.sessionInst.getLoggedInUser().accountId,
+						Session.sessionInst.getLoggedInUser().name,
+						"Course (id = " + id + ")");
+				throw pe;
+			}
 		}
 		// type == activity
 		else if (name.equals("activity")) {
@@ -35,18 +45,6 @@ public class ChangeControllerServiceImpl extends RemoteServiceServlet implements
 		// type == course list
 		else if (name.equals("courselist")) {
 			toSet = new CourseListController();
-		}
-		// type == login - used only when user just logged in
-		else if (name.equals("login")) {
-			MenuController mc = new MenuController();
-			Session.sessionInst.setMenu(mc);
-			Session.sessionInst.setController(null);
-			Session.sessionInst.run();
-			return Session.sessionInst.getViewSerial();
-		}
-		// type == logout - used only when user just logged out
-		else if (name.equals("logout")) {
-			// TODO login creation and setting
 		}
 		// type == activity edit
 		else if (name.equals("edit")) {
@@ -80,6 +78,11 @@ public class ChangeControllerServiceImpl extends RemoteServiceServlet implements
 		Session.sessionInst.setController(aec);
 		aec.loadEmpty(courseId);	// unique method for loading.
 		return Session.sessionInst.getViewSerial();
+	}
+	
+	private boolean hasPermissionCourse(String id) {
+		
+		return false;
 	}
 	
 }

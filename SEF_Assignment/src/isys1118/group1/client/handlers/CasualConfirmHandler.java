@@ -35,8 +35,6 @@ public class CasualConfirmHandler implements ClickHandler {
 		// can just reuse casual info.
 		ucsa.getCasualInfo(
 				modal.getCasualId(),
-				EAView.getCourseId(),
-				EAView.getActivityId(),
 				new AsyncCallback<CasualInfo>() {
 
 					@Override

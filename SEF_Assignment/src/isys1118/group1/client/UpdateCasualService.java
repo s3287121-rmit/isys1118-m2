@@ -11,11 +11,9 @@ public interface UpdateCasualService extends RemoteService {
 	/**
 	 * Returns info for a single casual, using the given ID.
 	 * @param casualId
-	 * @param courseId
-	 * @param activityId
 	 * @return
 	 */
-	public CasualInfo getCasualInfo(String casualId, String courseId, String activityId);
+	public CasualInfo getCasualInfo(String casualId);
 	
 	/**
 	 * Gets all casuals in a list. This information will then be used to choose

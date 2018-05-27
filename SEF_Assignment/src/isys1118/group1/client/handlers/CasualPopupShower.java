@@ -30,16 +30,17 @@ public class CasualPopupShower implements ClickHandler {
 	@Override
 	public void onClick(ClickEvent event) {
 		// hard reset of casual ID
-		modal.setCasualId(activityEdit.getCasualId());
+		if (activityEdit != null) {
+			modal.setCasualId(activityEdit.getCasualId());
+		}
 		modal.clearContent();
 		if (!modal.isShowing()) {
 			modal.show();
 		}
+		
 		ucsa = GWT.create(UpdateCasualService.class);
 		ucsa.getCasualInfo(
-				activityEdit.getCasualId(),
-				activityEdit.getCourseId(),
-				activityEdit.getActivityId(),
+				modal.getCasualId(),
 				new AsyncCallback<CasualInfo>() {
 
 					@Override

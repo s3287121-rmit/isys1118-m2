@@ -12,7 +12,7 @@ public class LogClient {
 	public static Logger logger;
 	
 	static {
-		logger = Logger.getLogger("client");
+		logger = Logger.getLogger("");
 		for (Handler h : logger.getHandlers()) {
 			h.setFormatter(new Formatter() {
 				

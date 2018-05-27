@@ -121,16 +121,50 @@ div {
 	visibility: hidden;
 }
 
+#message {
+	position: fixed;
+	display: block;
+	text-align: center;
+	color: red;
+	background-color: #FFC0C0;
+}
+
 .form-error {
 	color: red;
 	display: none;
 }
 
 .selected {
-	border: black solid 4px;
+	border: 4px solid black;
 }
 
 .conflict {
 	background-color: #888888;
 	color: #444444;
+}
+
+#container-row {
+	visibility: hidden;
+}
+
+#login {
+	visibility: visible;
+	background-color: #FFFFFF;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+.login-box {
+	width: 400px;
+	height: 300px;
+	display: block;
+	margin: 200px auto 0px auto;
+	border: 2px solid black;
+	padding: 20px;
+}
+
+#login-message {
+	visibility: hidden;
+	color: red;
 }

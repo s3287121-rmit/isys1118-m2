@@ -36,7 +36,9 @@ public class CasualPopupHider implements ClickHandler, CloseHandler<PopupPanel> 
 	}
 	
 	private void fireEvent() {
-		modal.setCasualId(activityEdit.getCasualId());
+		if (activityEdit != null) {
+			modal.setCasualId(activityEdit.getCasualId());
+		}
 		modal.clearContent();
 	}
 

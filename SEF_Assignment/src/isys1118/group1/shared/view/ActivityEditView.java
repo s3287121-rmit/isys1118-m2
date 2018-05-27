@@ -5,7 +5,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SubmitButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -209,7 +208,7 @@ public class ActivityEditView extends View {
 		buttonPanel.addStyleName("right-align");
 		Button cancelButton = new Button("Cancel");
 		cancelButton.addClickHandler(new ControllerLink("activity", activityId));
-		SubmitButton submitButton = new SubmitButton("Submit");
+		Button submitButton = new Button("Submit");
 		submitButton.addClickHandler(new SubmitActivityHandler(activityId, courseId));
 		buttonPanel.add(cancelButton);
 		buttonPanel.add(submitButton);

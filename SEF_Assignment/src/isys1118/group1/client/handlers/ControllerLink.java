@@ -8,6 +8,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import isys1118.group1.client.ChangeControllerService;
 import isys1118.group1.client.ChangeControllerServiceAsync;
 import isys1118.group1.client.helpers.LogClient;
+import isys1118.group1.client.helpers.MessageDisplay;
+import isys1118.group1.shared.error.PermissionException;
 import isys1118.group1.shared.view.View;
 import isys1118.group1.shared.view.ViewSerial;
 
@@ -30,6 +32,10 @@ public class ControllerLink implements ClickHandler {
 			@Override
 			public void onFailure(Throwable caught) {
 				LogClient.logError("There was a problem getting a new Controller.\n" + caught.getMessage(), caught);
+				if (caught instanceof PermissionException) {
+					PermissionException pe = (PermissionException) caught;
+					MessageDisplay.displayMessage(pe.getMessage());
+				}
 			}
 
 			@Override

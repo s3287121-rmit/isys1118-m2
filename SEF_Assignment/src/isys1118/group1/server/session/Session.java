@@ -4,6 +4,7 @@ import java.util.Random;
 
 import isys1118.group1.server.controller.Controller;
 import isys1118.group1.server.controller.MenuController;
+import isys1118.group1.server.user.User;
 import isys1118.group1.shared.view.View;
 import isys1118.group1.shared.view.ViewSerial;
 
@@ -15,6 +16,8 @@ public class Session {
 	
 	private Controller currentController;
 	private MenuController menuController;
+	
+	private User loggedInUser;
 	
 	private Session(long sessionId) {
 		this.sessionId = sessionId;
@@ -72,6 +75,14 @@ public class Session {
 	
 	public ViewSerial getViewSerial() {
 		return ViewSerial.create(getMenuView(), getCurrentView());
+	}
+
+	public User getLoggedInUser() {
+		return loggedInUser;
+	}
+
+	public void setLoggedInUser(User loggedInUser) {
+		this.loggedInUser = loggedInUser;
 	}
 	
 }

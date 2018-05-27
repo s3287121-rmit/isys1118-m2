@@ -6,7 +6,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import isys1118.group1.client.handlers.CasualPopupShower;
 import isys1118.group1.client.handlers.ControllerLink;
+import isys1118.group1.client.helpers.CasualModal;
 
 public class ActivityView extends View {
 	
@@ -68,6 +70,15 @@ public class ActivityView extends View {
 	public void show() {
 		final RootPanel title = RootPanel.get("title");
 		final RootPanel content = RootPanel.get("content");
+		final RootPanel popup = RootPanel.get("popup");
+		
+		// set up casual popup
+		String casualId = null;
+		if (casual != null && !casual.equals("None")) {
+			casualId = casual.split(" ")[0];
+		}
+		CasualModal casualModal = new CasualModal(casualId, null, true);
+		popup.add(casualModal);
 		
 		// clear screen
 		clearMain();
@@ -85,7 +96,11 @@ public class ActivityView extends View {
 		vp.add(courseLink);
 		vp.add(new HTML("<p>Type: " + type + "</p>"));
 		vp.add(new HTML("<p>Time: " + day + " " + startTime + " (" + duration + ")" + "</p>"));
+		
+		// casual details
 		HTML casualLink = new HTML("<p>Assigned Casual: " + casual + "</p>");
+		casualLink.addStyleName("pretty-link");
+		casualLink.addClickHandler(new CasualPopupShower(null, casualModal));
 		vp.add(casualLink);
 		
 		// optional casual price
