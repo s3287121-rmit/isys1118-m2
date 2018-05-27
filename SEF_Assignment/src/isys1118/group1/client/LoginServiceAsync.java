@@ -8,4 +8,6 @@ public interface LoginServiceAsync {
 	
 	public void login(String username, String password, AsyncCallback<ViewSerial> callback);
 	
+	public void logout(AsyncCallback<ViewSerial> callback);
+	
 }

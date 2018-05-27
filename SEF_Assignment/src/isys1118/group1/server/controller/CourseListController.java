@@ -12,7 +12,6 @@ public class CourseListController extends Controller {
 	@Override
 	protected void loadData() {
 		model.setCoursesFromUser("");
-		// view.setView(model);
 		view.setTitle("All Courses");
 		view.setCourses(model.getCoursesForView());
 	}

@@ -2,6 +2,8 @@ package isys1118.group1.server.database;
 
 import java.util.ArrayList;
 
+import isys1118.group1.shared.error.DatabaseException;
+
 /**
  * <p>Represents a row in a table in the database.<p>
  * 
@@ -24,7 +26,7 @@ public final class Row
      * @param data
      * @throws Exception 
      */
-    protected Row(Table parent, ArrayList<String> data) throws Exception
+    protected Row(Table parent, ArrayList<String> data) throws DatabaseException
     {
         fromTable = parent;
         length = fromTable.numColumns;
@@ -38,7 +40,7 @@ public final class Row
      * @param data
      * @throws Exception 
      */
-    protected Row(Table parent, String[] data) throws Exception
+    protected Row(Table parent, String[] data) throws DatabaseException
     {
         fromTable = parent;
         length = fromTable.numColumns;
@@ -65,12 +67,13 @@ public final class Row
      * @param data
      * @throws Exception 
      */
-    public void setData(ArrayList<String> data) throws Exception
+    public void setData(ArrayList<String> data) throws DatabaseException
     {
         if (data.size() != length)
         {
-            // TODO create DB Error
-            throw new Exception("Attempting to add data of different length.");
+        	DatabaseException de = new DatabaseException();
+			de.setMessage("Attempting to add data of different length.");
+			throw de;
         }
         this.data.clear();
         this.data.addAll(data);
@@ -83,12 +86,13 @@ public final class Row
      * @param data
      * @throws Exception 
      */
-    public void setData(String[] data) throws Exception
+    public void setData(String[] data) throws DatabaseException
     {
         if (data.length != length)
         {
-            // TODO create DB Error
-            throw new Exception("Attempting to add data of different length.");
+        	DatabaseException de = new DatabaseException();
+			de.setMessage("Attempting to add data of different length.");
+			throw de;
         }
         this.data.clear();
         for (String o : data)
@@ -116,14 +120,15 @@ public final class Row
      * @param columnName Name of column to change.
      * @param value
      */
-    public void setColumn(String columnName, String value)
+    public void setColumn(String columnName, String value) throws DatabaseException
     {
         int pos = fromTable.getColumnIndex(columnName);
         if (pos < 0)
         {
-            // TODO create DB Error
-            throw new Error("Table does not contain a column with name: "
+        	DatabaseException de = new DatabaseException();
+			de.setMessage("Table does not contain a column with name: "
                     + columnName);
+			throw de;
         }
         setColumn(pos, value);
     }
@@ -133,14 +138,15 @@ public final class Row
      * @param columnName
      * @return Data as object. Cast using {@link Table#getType(int)}.
      */
-    public String get(String columnName)
+    public String get(String columnName) throws DatabaseException
     {
         int pos = fromTable.getColumnIndex(columnName);
         if (pos < 0)
         {
-            // TODO create DB Error
-            throw new Error("Table does not contain a column with name: "
+        	DatabaseException de = new DatabaseException();
+			de.setMessage("Table does not contain a column with name: "
                     + columnName);
+			throw de;
         }
         return data.get(pos);
     }

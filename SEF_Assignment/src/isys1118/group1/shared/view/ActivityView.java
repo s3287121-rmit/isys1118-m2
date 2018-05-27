@@ -22,6 +22,9 @@ public class ActivityView extends View {
 	private String duration;
 	private String casual;
 	private String casualPrice;
+	
+	private boolean canEdit;
+	private boolean canViewCost;
 
 	@Override
 	public void setView() {}
@@ -65,6 +68,14 @@ public class ActivityView extends View {
 	public void setCasualPrice(String casualPrice) {
 		this.casualPrice = casualPrice;
 	}
+	
+	public void setCanEdit(boolean canEdit) {
+		this.canEdit = canEdit;
+	}
+	
+	public void setCanViewCost(boolean canViewCost) {
+		this.canViewCost = canViewCost;
+	}
 
 	@Override
 	public void show() {
@@ -104,16 +115,18 @@ public class ActivityView extends View {
 		vp.add(casualLink);
 		
 		// optional casual price
-		if (casual != null && !casual.isEmpty() &&
+		if (canViewCost && casual != null && !casual.isEmpty() &&
 				casualPrice != null && !casualPrice.isEmpty()) {
 			vp.add(new HTML("<p>Cost of casual: $" + casualPrice + "</p>"));
 		}
 		
 		// edit button
-		Button edit = new Button("Edit");
-		edit.addClickHandler(new ControllerLink("edit", activityId));
-		edit.setStyleName("right-align");
-		vp.add(edit);
+		if (canEdit) {
+			Button edit = new Button("Edit");
+			edit.addClickHandler(new ControllerLink("edit", activityId));
+			edit.setStyleName("right-align");
+			vp.add(edit);
+		}
 	}
 
 }

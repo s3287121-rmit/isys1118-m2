@@ -116,7 +116,8 @@ public class ActivityEditView extends View {
 		
 		// details
 		HTML courseLink = new HTML("<p>Course: " + courseStr + "</p>");
-		// courseLink.addClickHandler(new ControllerLink("course", courseId));
+		courseLink.addClickHandler(new ControllerLink("course", courseId));
+		courseLink.setStyleName("pretty-link");
 		vp.add(courseLink);
 		
 		// Type

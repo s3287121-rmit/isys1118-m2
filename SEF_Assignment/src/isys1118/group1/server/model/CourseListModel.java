@@ -6,6 +6,7 @@ import isys1118.group1.server.database.Database;
 import isys1118.group1.server.database.Row;
 import isys1118.group1.server.database.Table;
 import isys1118.group1.server.helpers.Course;
+import isys1118.group1.server.session.Session;
 
 public class CourseListModel extends Model {
 	
@@ -14,11 +15,14 @@ public class CourseListModel extends Model {
 	private ArrayList<Course> courses = new ArrayList<Course>();
 	
 	public void setCoursesFromUser(String userId) {
-		// TODO get courses that are only accessible to user
 		try {
 			Table courses = Database.getDatabase().getFullTable("courses");
 			for (int i = 0; i < courses.getNumRows(); i++) {
-				addCourse(courses.getRowIndex(i));
+				Row checkRow = courses.getRowIndex(i);
+				if (Session.getPermissions().allowCourseView(
+						checkRow.get("courseid"))) {
+					addCourse(checkRow);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

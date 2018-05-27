@@ -6,11 +6,15 @@ import isys1118.group1.server.database.Table;
 import isys1118.group1.server.helpers.Activity;
 import isys1118.group1.server.helpers.CasualPriceCalculator;
 import isys1118.group1.server.helpers.Cost;
+import isys1118.group1.server.session.Session;
 
 public class ActivityModel extends Model {
 	
 	private final String activityId;
 	private Activity activity;
+	
+	private boolean canEdit = false;
+	private boolean canViewCost = false;
 	
 	public ActivityModel(String activityId) {
 		this.activityId = activityId;
@@ -19,6 +23,19 @@ public class ActivityModel extends Model {
 	public void setActivityFromRow(Row row) {
 		activity = new Activity();
 		activity.setFromRow(row);
+		
+		// set permissions
+		if (Session.getPermissions().allowActivityEdit(
+				activityId, activity.getCourseId())) {
+			canEdit = true;
+		}
+		if (
+				Session.getPermissions().allowActivityEdit(
+						activityId, activity.getCourseId()) ||
+				Session.getPermissions().allowCourseApprove(
+						activity.getCourseId())) {
+			canViewCost = true;
+		}
 	}
 	
 	public String getActivityId() {
@@ -88,6 +105,14 @@ public class ActivityModel extends Model {
 	
 	public String getViewCost() {
 		return activity.getCasualPrice();
+	}
+
+	public boolean getViewCanEdit() {
+		return canEdit;
+	}
+
+	public boolean getViewCanViewCost() {
+		return canViewCost;
 	}
 
 }

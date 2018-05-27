@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import isys1118.group1.client.handlers.ControllerLink;
 import isys1118.group1.client.handlers.CourseStatusHandler;
 import isys1118.group1.client.handlers.CreateActivityHandler;
+import isys1118.group1.shared.Constants;
 
 public class CourseView extends View {
 	
@@ -37,6 +38,10 @@ public class CourseView extends View {
 	private boolean overpriced;
 	
 	private int approvalStatus;
+	
+	private boolean addActivity;
+	private boolean approvalButtons;
+	private boolean approvalView;
 
 	@Override
 	public void setView() {}
@@ -71,6 +76,30 @@ public class CourseView extends View {
 
 	public void setOverpriced(boolean overpriced) {
 		this.overpriced = overpriced;
+	}
+
+	public boolean isApprovalButtons() {
+		return approvalButtons;
+	}
+
+	public void setApprovalButtons(boolean approvalButtons) {
+		this.approvalButtons = approvalButtons;
+	}
+
+	public boolean isAddActivity() {
+		return addActivity;
+	}
+
+	public void setAddActivity(boolean addActivity) {
+		this.addActivity = addActivity;
+	}
+
+	public boolean isApprovalView() {
+		return approvalView;
+	}
+
+	public void setApprovalView(boolean approvalView) {
+		this.approvalView = approvalView;
 	}
 
 	@Override
@@ -124,59 +153,83 @@ public class CourseView extends View {
 			
 			wrapper.addClickHandler(new ControllerLink("activity", actSingle[0]));
 		}
+
+		// add activity button if allowed to add.
+		if (addActivity) {
+			Button edit = new Button("Add new activity");
+			edit.addClickHandler(new CreateActivityHandler(courseId));
+			edit.setStyleName("right-align");
+			vp.add(edit);
+		}
 		
-		// add activity button
-		Button edit = new Button("Add new activity");
-		edit.addClickHandler(new CreateActivityHandler(courseId));
-		edit.setStyleName("right-align");
-		vp.add(edit);
+		// budget - only if allowed
+		if (cost != null) {
+			HTML budgetHeader = new HTML("<h2>Budget</h2>");
+			HTML costAmount = new HTML("<p>Total Cost of Casuals: " + cost + "</p>");
+			if (overpriced) {
+				costAmount.addStyleName("overpriced");
+			}
+			HTML budgetAmount = new HTML("<p>Allowed Budget: " + budget + "</p>");
+			vp.add(budgetHeader);
+			vp.add(costAmount);
+			vp.add(budgetAmount);
+		}
 		
-		// budget
-		HTML budgetHeader = new HTML("<h2>Budget</h2>");
-		HTML costAmount = new HTML("<p>Total Cost of Casuals: " + cost + "</p>");
-		if (overpriced) {
-			costAmount.addStyleName("overpriced");
+		// status message
+		if (approvalView) {
+			HTML statusHeader = new HTML("<h2>Status</h2>");
+			vp.add(statusHeader);
+			HTML status = new HTML();
+			vp.add(status);
+			if (approvalStatus == APPROVAL_REJECTED) {
+				HTML recentRejection = new HTML(
+						"<p>NOTE: This course was recently rejected. " +
+						"Please update and resend.</p>");
+				recentRejection.addStyleName("rejected");
+				vp.add(recentRejection);
+			}
+			// set status message
+			if (approvalStatus == APPROVAL_EDITING ||
+					approvalStatus == APPROVAL_REJECTED) {
+				status.setHTML("<p>Course needs to be sent for approval!</p>");
+			}
+			else if(approvalStatus == APPROVAL_PENDING) {
+				status.setHTML("<p>Course is waiting for approval.</p>");
+			}
+			else if (approvalStatus == APPROVAL_ACCEPTED) {
+				status.setHTML("<p>Course has been approved.</p>");
+			}
 		}
-		HTML budgetAmount = new HTML("<p>Allowed Budget: " + budget + "</p>");
-		vp.add(budgetHeader);
-		vp.add(costAmount);
-		vp.add(budgetAmount);
 		
-		// status
-		HTML statusHeader = new HTML("<h2>Status</h2>");
-		vp.add(statusHeader);
-		HTML status = new HTML();
-		vp.add(status);
-		if (approvalStatus == APPROVAL_REJECTED) {
-			HTML recentRejection = new HTML("<p>NOTE: This course was recently rejected. Please update and resend.</p>");
-			recentRejection.addStyleName("rejected");
-			vp.add(recentRejection);
-		}
-		if (approvalStatus == APPROVAL_EDITING ||
-				approvalStatus == APPROVAL_REJECTED) {
-			Button sendButton = new Button();
-			sendButton.setText("Send for approval");
-			sendButton.addStyleName("right-align");
-			sendButton.addClickHandler(new CourseStatusHandler(courseId, "pending"));
-			status.setHTML("<p>Course needs to be sent for approval!</p>");
-			vp.add(sendButton);
-		}
-		if (approvalStatus == APPROVAL_PENDING) {
-			HorizontalPanel hp = new HorizontalPanel();
-			hp.addStyleName("right-align");
-			Button acceptButton = new Button();
-			acceptButton.setText("Accept");
-			acceptButton.addClickHandler(new CourseStatusHandler(courseId, "accepted"));
-			Button rejectButton = new Button();
-			rejectButton.setText("Reject");
-			rejectButton.addClickHandler(new CourseStatusHandler(courseId, "rejected"));
-			status.setHTML("<p>Course is waiting for approval.</p>");
-			hp.add(acceptButton);
-			hp.add(rejectButton);
-			vp.add(hp);
-		}
-		if (approvalStatus == APPROVAL_ACCEPTED) {
-			status.setHTML("<p>Course has been approved.</p>");
+		// status state buttons
+		if (approvalButtons) {
+			if (approvalStatus == APPROVAL_EDITING ||
+						approvalStatus == APPROVAL_REJECTED) {
+				Button sendButton = new Button();
+				sendButton.setText("Send for approval");
+				sendButton.addStyleName("right-align");
+				sendButton.addClickHandler(
+						new CourseStatusHandler(courseId,
+								Constants.COURSE_STATUS_PENDING));
+				vp.add(sendButton);
+			}
+			else if (approvalStatus == APPROVAL_PENDING) {
+				HorizontalPanel hp = new HorizontalPanel();
+				hp.addStyleName("right-align");
+				Button acceptButton = new Button();
+				acceptButton.setText("Accept");
+				acceptButton.addClickHandler(
+						new CourseStatusHandler(courseId,
+								Constants.COURSE_STATUS_ACCEPTED));
+				Button rejectButton = new Button();
+				rejectButton.setText("Reject");
+				rejectButton.addClickHandler(
+						new CourseStatusHandler(courseId,
+								Constants.COURSE_STATUS_REJECTED));
+				hp.add(acceptButton);
+				hp.add(rejectButton);
+				vp.add(hp);
+			}
 		}
 		
 	}

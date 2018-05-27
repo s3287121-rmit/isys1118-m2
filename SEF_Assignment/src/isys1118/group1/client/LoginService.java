@@ -10,4 +10,6 @@ public interface LoginService extends RemoteService {
 
 	public ViewSerial login(String username, String password);
 	
+	public ViewSerial logout();
+	
 }

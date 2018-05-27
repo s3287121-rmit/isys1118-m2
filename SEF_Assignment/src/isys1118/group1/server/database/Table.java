@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import isys1118.group1.shared.error.DatabaseException;
+
 /**
  * <p>Represents a table of rows, used by the database.</p>
  * 
@@ -49,9 +51,11 @@ public class Table
         }
     }
     
-    protected Table(String tableName, String[] names) throws Exception {
+    protected Table(String tableName, String[] names) throws DatabaseException {
     	if (names.length <= 0) {
-    		throw new Exception("Failed to create table: problem with table header");
+    		DatabaseException de = new DatabaseException();
+			de.setMessage("Failed to create table: problem with table header");
+			throw de;
     	}
     	this.tableName = tableName;
     	numColumns = names.length;
@@ -81,17 +85,11 @@ public class Table
      * @return
      * @throws Exception 
      */
-    public Row createNewRow(ArrayList<String> data)
+    public Row createNewRow(ArrayList<String> data) throws DatabaseException
     {
-    	try {
-    		Row r = new Row(this, data);
-            rows.add(r);
-            return r;
-    	}
-        catch (Exception e) {
-        	System.out.println(e.getMessage());
-        	return null;
-        }
+		Row r = new Row(this, data);
+        rows.add(r);
+        return r;
     }
     
     /**
@@ -103,17 +101,11 @@ public class Table
      * @return
      * @throws Exception 
      */
-    public Row createNewRow(String[] data) throws Exception
+    public Row createNewRow(String[] data) throws DatabaseException
     {
-    	try {
-    		Row r = new Row(this, data);
-            rows.add(r);
-            return r;
-    	}
-        catch (Exception e) {
-        	System.out.println(e.getMessage());
-        	return null;
-        }
+		Row r = new Row(this, data);
+        rows.add(r);
+        return r;
     }
     
     /**
@@ -144,7 +136,7 @@ public class Table
      * @throws Exception 
      */
     @Deprecated
-    public Row getRowFromTable(String query) throws Exception
+    public Row getRowFromTable(String query) throws DatabaseException
     {
         String[] data = new String[numColumns];
         for (int i = 0; i < data.length; i++)
@@ -165,6 +157,7 @@ public class Table
      * @throws Exception 
      */
     public Row getRowEquals(String field, String value)
+    		throws DatabaseException
     {
     	for (Row r : rows) {
     		if (r.has(field)) {
@@ -186,7 +179,8 @@ public class Table
      * @return Row or null
      * @throws Exception 
      */
-    public Row getRowEquals(String[] fields, String[] values) {
+    public Row getRowEquals(String[] fields, String[] values)
+    		throws DatabaseException {
     	if (fields.length != values.length) {
     		return null;
     	}
@@ -219,7 +213,7 @@ public class Table
      * @throws Exception 
      */
     @Deprecated
-    public Row[] getRowsFromTable(String query) throws Exception
+    public Row[] getRowsFromTable(String query) throws DatabaseException
     {
         int end = (new Random()).nextInt(5);
         Row[] allDummies = new Row[2 + end];
@@ -246,6 +240,7 @@ public class Table
      * @return ArrayList with all rows. Can be empty.
      */
     public ArrayList<Row> getRowsEqual(String field, String value)
+    		throws DatabaseException
     {
         ArrayList<Row> ret = new ArrayList<Row>();
         for (Row r : rows) {
@@ -266,6 +261,7 @@ public class Table
      * @return ArrayList with all rows. Can be empty.
      */
     public ArrayList<Row> getRowsEqual(String[] fields, String[] values)
+    		throws DatabaseException
     {
         ArrayList<Row> ret = new ArrayList<Row>();
         if (fields.length != values.length) {
@@ -295,7 +291,7 @@ public class Table
      * @throws Exception 
      * @throws IOException 
      */
-    public boolean commitChanges() throws Exception
+    public boolean commitChanges() throws DatabaseException, IOException
     {
 
     	StringBuilder sb = new StringBuilder();
@@ -335,7 +331,9 @@ public class Table
 			
 		}
     	catch (Exception e) {
-			throw e;
+    		DatabaseException de = new DatabaseException();
+			de.setMessage(e.getMessage());
+			throw de;
 		}
     	finally {
     		if (bw != null) {

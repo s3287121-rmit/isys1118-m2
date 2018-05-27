@@ -25,4 +25,11 @@ public class MessageDisplay {
 		timer.schedule(10000);
 	}
 	
+	public static void hideMessage() {
+		RootPanel messageBox = RootPanel.get("message");
+		messageBox.getElement().getStyle()
+			.setVisibility(Visibility.HIDDEN);
+		messageBox.clear();
+	}
+	
 }

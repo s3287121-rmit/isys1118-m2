@@ -9,6 +9,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import isys1118.group1.client.UpdateCasualService;
 import isys1118.group1.client.UpdateCasualServiceAsync;
 import isys1118.group1.client.helpers.CasualModal;
+import isys1118.group1.client.helpers.LogClient;
+import isys1118.group1.client.helpers.MessageDisplay;
 import isys1118.group1.shared.CasualInfo;
 import isys1118.group1.shared.view.ActivityEditView;
 
@@ -44,7 +46,8 @@ public class CasualSelectHandler implements ClickHandler {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						Window.alert("An error occurred while getting the casual's information.");
+						LogClient.logError(caught.getMessage(), caught);
+						MessageDisplay.displayMessage(caught.getMessage());
 					}
 
 					@Override

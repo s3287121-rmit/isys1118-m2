@@ -97,7 +97,7 @@ div {
 	background-color: #E0E0FF;
 }
 
-.card:hover, .pretty-link {
+.card, .pretty-link, .select-casual-single {
 	cursor: pointer;
 }
 
@@ -167,4 +167,13 @@ div {
 #login-message {
 	visibility: hidden;
 	color: red;
+}
+
+.hint-table-header td, .hint-table-row td {
+	width: 80px;
+	padding: 5px;
+}
+
+.hint-table-header {
+	border-bottom: 1px solid black;
 }

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import isys1118.group1.server.controller.Controller;
 import isys1118.group1.server.controller.MenuController;
+import isys1118.group1.server.helpers.Permissions;
 import isys1118.group1.server.user.User;
 import isys1118.group1.shared.view.View;
 import isys1118.group1.shared.view.ViewSerial;
@@ -14,6 +15,8 @@ public class Session {
 	
 	public final long sessionId;
 	
+	private final Permissions permissionInst;
+	
 	private Controller currentController;
 	private MenuController menuController;
 	
@@ -21,6 +24,7 @@ public class Session {
 	
 	private Session(long sessionId) {
 		this.sessionId = sessionId;
+		this.permissionInst = new Permissions();
 	}
 	
 	public void setController(Controller controller) {
@@ -55,6 +59,15 @@ public class Session {
 	
 	public static boolean checkSession() {
 		return sessionInst != null;
+	}
+	
+	public static Permissions getPermissions() {
+		if (!checkSession()) {
+			return null;
+		}
+		else {
+			return sessionInst.permissionInst;
+		}
 	}
 	
 	public View getCurrentView() {

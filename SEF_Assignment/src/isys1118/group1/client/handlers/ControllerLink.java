@@ -31,7 +31,7 @@ public class ControllerLink implements ClickHandler {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				LogClient.logError("There was a problem getting a new Controller.\n" + caught.getMessage(), caught);
+				LogClient.logError(caught.getMessage(), caught);
 				if (caught instanceof PermissionException) {
 					PermissionException pe = (PermissionException) caught;
 					MessageDisplay.displayMessage(pe.getMessage());

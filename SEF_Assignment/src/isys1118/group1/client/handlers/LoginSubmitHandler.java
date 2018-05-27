@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import isys1118.group1.client.LoginService;
 import isys1118.group1.client.LoginServiceAsync;
 import isys1118.group1.client.helpers.LogClient;
+import isys1118.group1.client.helpers.MessageDisplay;
 import isys1118.group1.shared.view.View;
 import isys1118.group1.shared.view.ViewSerial;
 
@@ -40,6 +41,7 @@ public class LoginSubmitHandler implements ClickHandler {
 			@Override
 			public void onFailure(Throwable caught) {
 				LogClient.logError(caught.getMessage(), caught);
+				MessageDisplay.displayMessage(caught.getMessage());
 			}
 
 			@Override
@@ -49,15 +51,18 @@ public class LoginSubmitHandler implements ClickHandler {
 				if (result == null) {
 					Element messageBox = DOM.getElementById("login-message");
 					InputElement messageBoxI = (InputElement) messageBox;
-					messageBoxI.setInnerHTML("<p>An error occurred when trying to log in.</p>");
+					messageBoxI.setInnerHTML(
+							"<p>An error occurred when trying to log in.</p>");
 					messageBoxI.getStyle().setVisibility(Visibility.VISIBLE);
-					LogClient.logMessage("An error occurred when trying to log in.");
+					LogClient.logMessage(
+							"An error occurred when trying to log in.");
 					return;
 				}
 				else if (result.error) {
 					Element messageBox = DOM.getElementById("login-message");
 					InputElement messageBoxI = (InputElement) messageBox;
-					messageBoxI.setInnerHTML("<p>" + result.errorMessage + "</p>");
+					messageBoxI.setInnerHTML(
+							"<p>" + result.errorMessage + "</p>");
 					messageBoxI.getStyle().setVisibility(Visibility.VISIBLE);
 					LogClient.logMessage(result.errorMessage);
 					return;
@@ -65,8 +70,14 @@ public class LoginSubmitHandler implements ClickHandler {
 				
 				// if no error, hide login page and run views
 				RootPanel login = RootPanel.get("login");
+				RootPanel hintBox = RootPanel.get("hint-box");
 				login.clear();
 				login.getElement().getStyle().setVisibility(Visibility.HIDDEN);
+				if (hintBox != null) {
+					hintBox.clear();
+					hintBox.getElement().getStyle()
+						.setVisibility(Visibility.HIDDEN);
+				}
 				if (result.menu != null) {
 					result.menu.show();
 				}

@@ -13,6 +13,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import isys1118.group1.client.SubmitActivityService;
 import isys1118.group1.client.SubmitActivityServiceAsync;
 import isys1118.group1.client.helpers.LogClient;
+import isys1118.group1.client.helpers.MessageDisplay;
 import isys1118.group1.shared.EditActivityInputs;
 import isys1118.group1.shared.ValidateActivityInput;
 
@@ -81,25 +82,27 @@ public class SubmitActivityHandler implements ClickHandler {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				LogClient.logError("Error validating the activity inputs.", caught);
+				LogClient.logError(
+						caught.getMessage(),
+						caught);
+				MessageDisplay.displayMessage(
+						caught.getMessage());
 			}
 
 			@Override
 			public void onSuccess(EditActivityInputs result) {
-				
 				// if there are errors, just display the error messages.
-				if (!result.success && result.errors != null && result.errors.length > 0) {
+				if (!result.success && result.errors != null &&
+						result.errors.length > 0) {
 					doErrorMessages(result.errors);
 					return;
 				}
 				
 				// otherwise, switch controllers.
 				Window.alert("Saved!");
-				
 			}
 		
 		});
-		
 	}
 	
 	private boolean doErrorMessages(String[] errors) {
@@ -108,26 +111,32 @@ public class SubmitActivityHandler implements ClickHandler {
 			LogClient.logMessage(e);
 			if (e.equalsIgnoreCase("type")) {
 				Element typeError = DOM.getElementById("edit-type-error");
-				typeError.setInnerHTML("<p>Type must be either 'Lecture', 'Tutorial', 'Practical', or 'Lab'</p>");
+				typeError.setInnerHTML(
+						"<p>Type must be either 'Lecture', 'Tutorial', " +
+						"'Practical', or 'Lab'</p>");
 				typeError.getStyle().setDisplay(Style.Display.INLINE);
 				allowSave = false;
 			}
 			else if (e.equalsIgnoreCase("day")) {
 				Element dayError = DOM.getElementById("edit-day-error");
-				dayError.setInnerHTML("<p>Day must be a day of the week (ex. 'Monday')</p>");
+				dayError.setInnerHTML(
+						"<p>Day must be a day of the week (ex. 'Monday')</p>");
 				dayError.getStyle().setDisplay(Style.Display.INLINE);
 				allowSave = false;
 			}
 			else if (e.equalsIgnoreCase("timeh") ||
 					e.equalsIgnoreCase("timem")) {
 				Element timeError = DOM.getElementById("edit-timestart-error");
-				timeError.setInnerHTML("<p>Hours must be between 7 and 21. Minutes must be between 0 and 59.</p>");
+				timeError.setInnerHTML(
+						"<p>Hours must be between 7 and 21. Minutes must be " +
+						"between 0 and 59.</p>");
 				timeError.getStyle().setDisplay(Style.Display.INLINE);
 				allowSave = false;
 			}
 			else if (e.equalsIgnoreCase("durm")) {
 				Element durmError = DOM.getElementById("edit-durationm-error");
-				durmError.setInnerHTML("<p>Duration must be between 30 and 240 minutes</p>");
+				durmError.setInnerHTML(
+						"<p>Duration must be between 30 and 240 minutes</p>");
 				durmError.getStyle().setDisplay(Style.Display.INLINE);
 				allowSave = false;
 			}
@@ -143,19 +152,25 @@ public class SubmitActivityHandler implements ClickHandler {
 					continue;
 				}
 				else if (eMessage.contains("does_not_exist")) {
-					casualError.setInnerHTML("<p>This casual does not exist in the database!</p>");
+					casualError.setInnerHTML(
+							"<p>This casual does not exist in the " +
+							"database!</p>");
 					casualError.getStyle().setDisplay(Style.Display.INLINE);
 					allowSave = false;
 				}
 				else if (eMessage.contains("exception_raised") ||
 						eMessage.contains("database_error")) {
-					casualError.setInnerHTML("<p>There was an error checking the user.</p>");
+					casualError.setInnerHTML(
+							"<p>There was an error checking the user.</p>");
 					casualError.getStyle().setDisplay(Style.Display.INLINE);
 					allowSave = false;
 				}
 				else if (eMessage.contains("clash")) {
-					String clashId = eMessage.substring(eMessage.indexOf('=') + 1);
-					casualError.setInnerHTML("<p>There was a clash with Activity " + clashId + "</p>");
+					String clashId
+						= eMessage.substring(eMessage.indexOf('=') + 1);
+					casualError.setInnerHTML(
+							"<p>There was a clash with Activity " +
+							clashId + "</p>");
 					casualError.getStyle().setDisplay(Style.Display.INLINE);
 					allowSave = false;
 				}

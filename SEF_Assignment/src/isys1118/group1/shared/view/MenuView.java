@@ -5,6 +5,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import isys1118.group1.client.handlers.ControllerLink;
+import isys1118.group1.client.handlers.LogoutHandler;
 import isys1118.group1.client.handlers.ResetDatabaseHandler;
 
 public class MenuView extends View {
@@ -63,6 +64,7 @@ public class MenuView extends View {
 		vp.add(optionPanel);
 		for (String[] optionSingle : options) {
 			HTML anOption = new HTML(optionSingle[2]);
+			anOption.setStyleName("pretty-link");
 			if (optionSingle[1].equals("reset")) {
 				anOption.addClickHandler(new ResetDatabaseHandler(optionSingle[0], optionSingle[1]));
 			}
@@ -71,6 +73,13 @@ public class MenuView extends View {
 			}
 			vp.add(anOption);
 		}
+		
+		// logout
+		HTML logout = new HTML("Log Out");
+		logout.setStyleName("pretty-link");
+		logout.addClickHandler(new LogoutHandler());
+		vp.add(logout);
+		
 	}
 
 }

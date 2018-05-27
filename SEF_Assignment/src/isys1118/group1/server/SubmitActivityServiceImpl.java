@@ -7,13 +7,30 @@ import isys1118.group1.server.database.Database;
 import isys1118.group1.server.database.Row;
 import isys1118.group1.server.database.Table;
 import isys1118.group1.server.helpers.ValidateCasualInput;
+import isys1118.group1.server.session.Session;
 import isys1118.group1.shared.EditActivityInputs;
+import isys1118.group1.shared.error.PermissionException;
 
 @SuppressWarnings("serial")
-public class SubmitActivityServiceImpl extends RemoteServiceServlet implements SubmitActivityService {
+public class SubmitActivityServiceImpl extends RemoteServiceServlet
+		implements SubmitActivityService {
 
 	@Override
-	public EditActivityInputs submit(String activityId, EditActivityInputs inputs) throws Exception {
+	public EditActivityInputs submit(
+			String activityId, EditActivityInputs inputs)
+					throws Exception, PermissionException {
+		
+		// quick check for user permission. Must be a course coordinator with
+		// permission to edit this activity.
+		if (!Session.getPermissions().allowActivityEdit(
+				activityId, inputs.courseid)) {
+			PermissionException pe = new PermissionException();
+			pe.set(
+					Session.sessionInst.getLoggedInUser().accountId,
+					Session.sessionInst.getLoggedInUser().name,
+					"Submit Activity (id = " + activityId + ")");
+			throw pe;
+		}
 
 		// check for errors
 		String[] errors = ValidateCasualInput.validateInputsServer(
@@ -48,8 +65,11 @@ public class SubmitActivityServiceImpl extends RemoteServiceServlet implements S
 			Row checkAlreadyExists = allAssignments.getRowEquals(
 					"activityid", activityId);
 			if (checkAlreadyExists == null) {
-				System.out.println("New Assignment added for userid=" + casualData[0] + " and activityid=" + activityId);
-				allAssignments.createNewRow(new String[] {casualData[0], activityId});
+				System.out.println(
+						"New Assignment added for userid=" +
+						casualData[0] + " and activityid=" + activityId);
+				allAssignments.createNewRow(
+						new String[] {casualData[0], activityId});
 				allAssignments.commitChanges();
 			}
 			// otherwise just update
@@ -63,8 +83,10 @@ public class SubmitActivityServiceImpl extends RemoteServiceServlet implements S
 		
 		// update activity info. If the row already exists, then update it.
 		// Otherwise, create a new row.
-		Table allActivities = Database.getDatabase().getFullTable("activities");
-		Row activityExists = allActivities.getRowEquals("activityid", activityId);
+		Table allActivities
+			= Database.getDatabase().getFullTable("activities");
+		Row activityExists
+			= allActivities.getRowEquals("activityid", activityId);
 		String[] rowData = new String[] {
 				activityId,
 				inputs.type,

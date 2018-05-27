@@ -4,11 +4,15 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import isys1118.group1.client.LoginService;
 import isys1118.group1.server.controller.CourseListController;
+import isys1118.group1.server.controller.LoginController;
 import isys1118.group1.server.controller.MenuController;
 import isys1118.group1.server.database.Database;
 import isys1118.group1.server.database.Row;
 import isys1118.group1.server.database.Table;
 import isys1118.group1.server.session.Session;
+import isys1118.group1.server.user.Administrator;
+import isys1118.group1.server.user.Approver;
+import isys1118.group1.server.user.Casual;
 import isys1118.group1.server.user.CourseCoordinator;
 import isys1118.group1.server.user.User;
 import isys1118.group1.shared.view.ViewSerial;
@@ -22,7 +26,8 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		// check if not filled out
 		if (username == null || username.isEmpty() ||
 				password == null || password.isEmpty()) {
-			return ViewSerial.createError("User / Password has not been given.");
+			return ViewSerial.createError(
+					"User / Password has not been given.");
 		}
 
 		try {
@@ -55,13 +60,23 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 						theUser.get("name"));
 			}
 			else if (theUser.get("type").equals("approver")) {
-				userObj = new CourseCoordinator(
+				userObj = new Approver(
+						theUser.get("userid"),
+						theUser.get("name"));
+			}
+			else if (theUser.get("type").equals("admin")) {
+				userObj = new Administrator(
+						theUser.get("userid"),
+						theUser.get("name"));
+			}
+			else if (theUser.get("type").equals("casual")) {
+				userObj = new Casual(
 						theUser.get("userid"),
 						theUser.get("name"));
 			}
 			else {
-				return ViewSerial.createError("User " + theUser.get("userid") + " " +
-						theUser.get("name") +
+				return ViewSerial.createError("User " + theUser.get("userid") +
+						" " + theUser.get("name") +
 						" cannot log in with their permissions.");
 			}
 			
@@ -81,6 +96,16 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		}
 		
 		return null;
+	}
+
+	@Override
+	public ViewSerial logout() {
+		Session.sessionInst.setLoggedInUser(null);
+		LoginController lc = new LoginController();
+		Session.sessionInst.setMenu(null);
+		Session.sessionInst.setController(lc);
+		Session.sessionInst.run();
+		return Session.sessionInst.getViewSerial();
 	}
 
 	

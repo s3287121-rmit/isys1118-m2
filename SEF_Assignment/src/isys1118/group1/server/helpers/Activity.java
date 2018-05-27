@@ -1,10 +1,12 @@
 package isys1118.group1.server.helpers;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import isys1118.group1.server.database.Database;
 import isys1118.group1.server.database.Row;
 import isys1118.group1.server.database.Table;
+import isys1118.group1.shared.error.DatabaseException;
 
 @SuppressWarnings("serial")
 public class Activity implements Serializable {
@@ -21,23 +23,28 @@ public class Activity implements Serializable {
 	private String casualPrice = null;
 	
 	public void setFromRow(Row row) {
-		this.activityId = row.get("activityid");
-		this.courseId = row.get("courseid");
-		this.type = row.get("type");
-		this.day = row.get("day");
-		String timeHStr = row.get("timeh");
-		this.startTimeH = Integer.parseInt(timeHStr);
-		String timeMStr = row.get("timem");
-		this.startTimeM = Integer.parseInt(timeMStr);
-		String durationStr = row.get("durationm");
-		this.durationM = Integer.parseInt(durationStr);
-		
-		// get assigned casual using casualId
+
 		try {
-			Table assignments = Database.getDatabase().getFullTable("assignments");
+			
+			// get info
+			this.activityId = row.get("activityid");
+			this.courseId = row.get("courseid");
+			this.type = row.get("type");
+			this.day = row.get("day");
+			String timeHStr = row.get("timeh");
+			this.startTimeH = Integer.parseInt(timeHStr);
+			String timeMStr = row.get("timem");
+			this.startTimeM = Integer.parseInt(timeMStr);
+			String durationStr = row.get("durationm");
+			this.durationM = Integer.parseInt(durationStr);
+		
+			// get assigned casual using casualId
+			Table assignments
+				= Database.getDatabase().getFullTable("assignments");
 			Table users = Database.getDatabase().getFullTable("users");
-			Row assignedCasRow = assignments.getRowEquals("activityid", this.activityId);
-			// if a row is found in the assignments database with this activity,
+			Row assignedCasRow
+				= assignments.getRowEquals("activityid", this.activityId);
+			// if a row is found in the assignments database with this activity
 			// then we assign the casual.
 			if (assignedCasRow != null) {
 				this.assignedCasualId = assignedCasRow.get("userid");
@@ -49,7 +56,9 @@ public class Activity implements Serializable {
 				this.assignedCasualId = null;
 				this.assignedCasualName = null;
 			}
-		} catch (Exception e) {
+			
+		} catch (DatabaseException | IOException e) {
+			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -112,7 +121,8 @@ public class Activity implements Serializable {
 	}
 	
 	public String getStartTimeStr() {
-		return String.valueOf(startTimeH) + ":" + String.format("%02d", startTimeM);
+		return String.valueOf(startTimeH) + ":" +
+				String.format("%02d", startTimeM);
 	}
 	
 	public int getDurationM() {
@@ -172,30 +182,40 @@ public class Activity implements Serializable {
 	}
 
 	public void setRowToThis(Row dst) {
-		dst.setColumn("activityid", activityId);
-		dst.setColumn("type", type);
-		dst.setColumn("day", day);
-		dst.setColumn("timeh", String.valueOf(startTimeH));
-		dst.setColumn("timem", String.valueOf(startTimeM));
-		dst.setColumn("durationm", String.valueOf(durationM));
-		dst.setColumn("courseid", courseId);
+		try {
+			dst.setColumn("activityid", activityId);
+			dst.setColumn("type", type);
+			dst.setColumn("day", day);
+			dst.setColumn("timeh", String.valueOf(startTimeH));
+			dst.setColumn("timem", String.valueOf(startTimeM));
+			dst.setColumn("durationm", String.valueOf(durationM));
+			dst.setColumn("courseid", courseId);
+		}
+		catch (DatabaseException e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 	
 	public void saveCasualAssignment() {
 		try {
 			// find the relevant assignment (only one per activity)
-			Table allAssignments = Database.getDatabase().getFullTable("assignments");
-			Row assignment = allAssignments.getRowEquals("activityid", activityId);
+			Table allAssignments
+				= Database.getDatabase().getFullTable("assignments");
+			Row assignment
+				= allAssignments.getRowEquals("activityid", activityId);
 			// if it has not been assigned, we need to create it.
 			if (assignment == null) {
-				assignment = allAssignments.createNewRow(new String[] {assignedCasualId, activityId});
+				assignment = allAssignments.createNewRow(
+						new String[] {assignedCasualId, activityId});
 			}
 			// if it has been assigned, we need to update information
 			else {
 				assignment.setColumn("userId", assignedCasualId);
 			}
 			allAssignments.commitChanges();
-		} catch (Exception e) {
+		} catch (DatabaseException | IOException e) {
+			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
 	}

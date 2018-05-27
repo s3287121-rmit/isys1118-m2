@@ -1,7 +1,6 @@
 package isys1118.group1.client;
 
 import isys1118.group1.shared.view.LoginView;
-import isys1118.group1.shared.view.MenuView;
 
 import com.google.gwt.core.client.EntryPoint;
 

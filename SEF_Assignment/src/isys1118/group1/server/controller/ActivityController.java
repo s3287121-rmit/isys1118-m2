@@ -20,7 +20,8 @@ public class ActivityController extends Controller {
 	protected void loadData() {
 		try {
 			Table fullTable = Database.getDatabase().getFullTable("activities");
-			Row row = fullTable.getRowEquals("activityid", model.getActivityId());
+			Row row = fullTable.getRowEquals(
+					"activityid", model.getActivityId());
 			if (row != null) {
 				model.setActivityFromRow(row);
 				model.setCasualCost();
@@ -34,6 +35,8 @@ public class ActivityController extends Controller {
 				view.setDuration(model.getViewDuration());
 				view.setCasual(model.getViewAssignedCasual());
 				view.setCasualPrice(model.getViewCost());
+				view.setCanEdit(model.getViewCanEdit());
+				view.setCanViewCost(model.getViewCanViewCost());
 			}
 			else {
 				// TODO show 404 page.

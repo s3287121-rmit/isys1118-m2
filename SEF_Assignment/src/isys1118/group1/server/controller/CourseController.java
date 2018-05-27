@@ -32,11 +32,13 @@ public class CourseController extends Controller {
 				view.setApprovalStatus(model.getViewStatus());
 				view.setCost(model.getViewCost());
 				view.setOverpriced(model.getViewOverpriced());
+				view.setApprovalButtons(model.getViewApprovalButtons());
+				view.setAddActivity(model.isAddActivity());
+				view.setApprovalView(model.isApprovalView());
 			}
 			else {
 				// TODO show 404 page.
 			}
-			// TODO check that the user has access to the course and send a bad view if they do.
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

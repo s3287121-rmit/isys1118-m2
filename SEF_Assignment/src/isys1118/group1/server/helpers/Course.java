@@ -3,6 +3,7 @@ package isys1118.group1.server.helpers;
 import java.io.Serializable;
 
 import isys1118.group1.server.database.Row;
+import isys1118.group1.shared.error.DatabaseException;
 
 @SuppressWarnings("serial")
 public class Course implements Serializable {
@@ -18,15 +19,21 @@ public class Course implements Serializable {
 	private boolean overpriced = false;
 	
 	public void setFromRow(Row r) {
-		this.courseId = r.get("courseid");
-		this.courseName = r.get("coursename");
-		this.description = r.get("description");
-		String budgetDStr = r.get("totalbudgetd");
-		this.totalBudgetDollars = Integer.valueOf(budgetDStr);
-		String budgetCStr = r.get("totalbudgetc");
-		this.totalBudgetCents = Integer.valueOf(budgetCStr);
-		this.coordinatorId = r.get("coordinator");
-		this.status = r.get("status");
+		try {
+			this.courseId = r.get("courseid");
+			this.courseName = r.get("coursename");
+			this.description = r.get("description");
+			String budgetDStr = r.get("totalbudgetd");
+			this.totalBudgetDollars = Integer.valueOf(budgetDStr);
+			String budgetCStr = r.get("totalbudgetc");
+			this.totalBudgetCents = Integer.valueOf(budgetCStr);
+			this.coordinatorId = r.get("coordinator");
+			this.status = r.get("status");
+		}
+		catch (DatabaseException e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 	
 	public String getCourseId() {
@@ -78,7 +85,8 @@ public class Course implements Serializable {
 	}
 	
 	public String getBudgetTotal() {
-		return "$" + String.valueOf(totalBudgetDollars) + String.format(".%02d", totalBudgetCents);
+		return "$" + String.valueOf(totalBudgetDollars) +
+				String.format(".%02d", totalBudgetCents);
 	}
 	
 	public String getCoordinatorId() {

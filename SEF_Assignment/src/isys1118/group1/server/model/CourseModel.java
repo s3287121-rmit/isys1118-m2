@@ -1,5 +1,6 @@
 package isys1118.group1.server.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import isys1118.group1.server.database.Database;
@@ -9,6 +10,9 @@ import isys1118.group1.server.helpers.Activity;
 import isys1118.group1.server.helpers.CasualPriceCalculator;
 import isys1118.group1.server.helpers.Cost;
 import isys1118.group1.server.helpers.Course;
+import isys1118.group1.server.session.Session;
+import isys1118.group1.shared.Constants;
+import isys1118.group1.shared.error.DatabaseException;
 import isys1118.group1.shared.view.CourseView;
 
 public class CourseModel extends Model {
@@ -19,6 +23,9 @@ public class CourseModel extends Model {
 	private Course course;
 	private ArrayList<Activity> activities;
 	private boolean activityLoadError = false;
+	private boolean addActivity = false;
+	private boolean approvalButtons = false;
+	private boolean approvalView = false;
 	
 	public CourseModel(String courseId) {
 		this.courseId = courseId;
@@ -34,23 +41,58 @@ public class CourseModel extends Model {
 		course = new Course();
 		course.setFromRow(r);
 		try {
-			Table allActivities = Database.getDatabase().getFullTable("activities");
-			ArrayList<Row> actList = allActivities.getRowsEqual("courseid", course.getCourseId());
+			Table allActivities
+				= Database.getDatabase().getFullTable("activities");
+			ArrayList<Row> actList
+				= allActivities.getRowsEqual("courseid", course.getCourseId());
 			for (Row act : actList) {
-				addActivity(act);
+				if (Session.getPermissions().allowActivityView(
+						act.get("activityid"))) {
+					addActivity(act);
+				}
 			}
-		} catch (Exception e) {
+		} catch (DatabaseException | IOException e) {
 			activityLoadError = true;
 			e.printStackTrace();
 		}
 
-		// set cost
-		Cost cost = CasualPriceCalculator.costOfAllActivities(courseId);
-		course.setCost(cost.getPriceStr());
+		// set cost only if allowed
 		if (
-				cost.dollars > course.getTotalBudgetDollars() ||
-				(cost.dollars == course.getTotalBudgetDollars() && cost.cents > course.getTotalBudgetCents())) {
-			course.setOverpriced(true);
+				Session.getPermissions().allowCourseApprove(courseId) ||
+				Session.getPermissions().allowCourseEdit(courseId)) {
+			Cost cost = CasualPriceCalculator.costOfAllActivities(courseId);
+			course.setCost(cost.getPriceStr());
+			if (
+					cost.dollars > course.getTotalBudgetDollars() ||
+					(cost.dollars == course.getTotalBudgetDollars() &
+							cost.cents > course.getTotalBudgetCents())) {
+				course.setOverpriced(true);
+			}
+		}
+		
+		// check if adding activities is allowed
+		if (Session.getPermissions().allowCourseEdit(courseId)) {
+			addActivity = true;
+		}
+		
+		// check if view status is allowed
+		if (
+				Session.getPermissions().allowCourseEdit(courseId) ||
+				Session.getPermissions().allowCourseApprove(courseId)) {
+			approvalView = true;
+		}
+		
+		// check if the approval buttons should be displayed.
+		if (
+				(course.getStatus().equals(Constants.COURSE_STATUS_EDITING) ||
+				course.getStatus().equals(Constants.COURSE_STATUS_REJECTED)) &&
+				Session.getPermissions().allowCourseEdit(courseId)) {
+			approvalButtons = true;
+		}
+		else if (
+				course.getStatus().equals(Constants.COURSE_STATUS_PENDING) &&
+				Session.getPermissions().allowCourseApprove(courseId)) {
+			approvalButtons = true;
 		}
 		
 	}
@@ -130,6 +172,18 @@ public class CourseModel extends Model {
 	
 	public boolean getViewOverpriced() {
 		return course.isOverpriced();
+	}
+	
+	public boolean getViewApprovalButtons() {
+		return approvalButtons;
+	}
+
+	public boolean isAddActivity() {
+		return addActivity;
+	}
+
+	public boolean isApprovalView() {
+		return approvalView;
 	}
 
 }

@@ -1,6 +1,5 @@
 package isys1118.group1.server.controller;
 
-import isys1118.group1.server.database.Row;
 import isys1118.group1.shared.view.View;
 
 public abstract class Controller {
