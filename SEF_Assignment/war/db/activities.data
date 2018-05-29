@@ -11,3 +11,4 @@ activityid,type,day,timeh,timem,durationm,courseid
 355,Tutorial,Wednesday,10,30,120,troy1100
 373,Practical,Tuesday,9,30,120,troy1100
 3805,Lecture,Monday,7,30,30,troy1100
+640,Lecture,Monday,12,30,180,troy3030

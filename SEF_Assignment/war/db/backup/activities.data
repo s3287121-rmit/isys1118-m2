@@ -7,6 +7,8 @@ activityid,type,day,timeh,timem,durationm,courseid
 265,Tutorial,Wednesday,16,30,120,acha1935
 223,Practical,Tuesday,9,30,120,acha1935
 211,Tutorial,Wednesday,12,30,120,acha1935
-304,Lecture,Thursday,9,30,120,troy1100
+304,Lecture,Thursday,9,30,150,troy1100
 355,Tutorial,Wednesday,10,30,120,troy1100
 373,Practical,Tuesday,9,30,120,troy1100
+3805,Lecture,Monday,7,30,30,troy1100
+640,Lecture,Monday,12,30,180,troy3030
