@@ -18,7 +18,13 @@ public class Course implements Serializable {
 	private String cost;
 	private boolean overpriced = false;
 	
+	private boolean error = false;
+	
 	public void setFromRow(Row r) {
+		if (r == null) {
+			error = true;
+			return;
+		}
 		try {
 			this.courseId = r.get("courseid");
 			this.courseName = r.get("coursename");
@@ -31,6 +37,7 @@ public class Course implements Serializable {
 			this.status = r.get("status");
 		}
 		catch (DatabaseException e) {
+			error = true;
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
@@ -119,6 +126,10 @@ public class Course implements Serializable {
 
 	public void setOverpriced(boolean overpriced) {
 		this.overpriced = overpriced;
+	}
+	
+	public boolean getError() {
+		return this.error;
 	}
 
 }

@@ -5,6 +5,7 @@ import isys1118.group1.shared.view.View;
 public abstract class Controller {
 	
 	protected boolean viewShown = false;
+	protected boolean error = false;
 	
 	protected abstract void loadData();
 	
@@ -16,6 +17,10 @@ public abstract class Controller {
 	
 	public boolean hasBeenShown() {
 		return viewShown;
+	}
+	
+	public boolean isError() {
+		return error;
 	}
 
 }

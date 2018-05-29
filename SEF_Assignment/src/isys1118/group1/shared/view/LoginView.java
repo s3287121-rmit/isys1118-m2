@@ -43,6 +43,7 @@ public class LoginView extends View {
 		
 		// button
 		Button submitButton = new Button("Login");
+		submitButton.getElement().setId("login-button");
 		submitButton.addClickHandler(new LoginSubmitHandler());
 		vp.add(submitButton);
 		

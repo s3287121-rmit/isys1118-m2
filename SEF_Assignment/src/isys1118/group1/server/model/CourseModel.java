@@ -27,6 +27,8 @@ public class CourseModel extends Model {
 	private boolean approvalButtons = false;
 	private boolean approvalView = false;
 	
+	private boolean error = false;
+	
 	public CourseModel(String courseId) {
 		this.courseId = courseId;
 		this.course = null;
@@ -40,6 +42,10 @@ public class CourseModel extends Model {
 	public void setCourseFromRow(Row r) {
 		course = new Course();
 		course.setFromRow(r);
+		if (course.getError()) {
+			error = true;
+			return;
+		}
 		try {
 			Table allActivities
 				= Database.getDatabase().getFullTable("activities");
@@ -184,6 +190,10 @@ public class CourseModel extends Model {
 
 	public boolean isApprovalView() {
 		return approvalView;
+	}
+	
+	public boolean getError() {
+		return error;
 	}
 
 }

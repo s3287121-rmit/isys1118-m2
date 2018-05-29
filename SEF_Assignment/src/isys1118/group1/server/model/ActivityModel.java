@@ -16,6 +16,8 @@ public class ActivityModel extends Model {
 	private boolean canEdit = false;
 	private boolean canViewCost = false;
 	
+	private boolean error = false;
+	
 	public ActivityModel(String activityId) {
 		this.activityId = activityId;
 	}
@@ -23,6 +25,10 @@ public class ActivityModel extends Model {
 	public void setActivityFromRow(Row row) {
 		activity = new Activity();
 		activity.setFromRow(row);
+		if (activity.getError()) {
+			error = true;
+			return;
+		}
 		
 		// set permissions
 		if (Session.getPermissions().allowActivityEdit(
@@ -113,6 +119,10 @@ public class ActivityModel extends Model {
 
 	public boolean getViewCanViewCost() {
 		return canViewCost;
+	}
+	
+	public boolean getError() {
+		return error;
 	}
 
 }

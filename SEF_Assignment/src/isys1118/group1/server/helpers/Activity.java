@@ -22,7 +22,13 @@ public class Activity implements Serializable {
 	private String assignedCasualName = null;
 	private String casualPrice = null;
 	
+	private boolean error = false;
+	
 	public void setFromRow(Row row) {
+		if (row == null) {
+			error = true;
+			return;
+		}
 
 		try {
 			
@@ -58,6 +64,7 @@ public class Activity implements Serializable {
 			}
 			
 		} catch (DatabaseException | IOException e) {
+			error = true;
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
@@ -179,6 +186,10 @@ public class Activity implements Serializable {
 
 	public void setCasualPrice(String casualPrice) {
 		this.casualPrice = casualPrice;
+	}
+	
+	public boolean getError() {
+		return this.error;
 	}
 
 	public void setRowToThis(Row dst) {

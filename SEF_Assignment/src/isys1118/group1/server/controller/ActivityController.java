@@ -9,8 +9,8 @@ import isys1118.group1.shared.view.View;
 
 public class ActivityController extends Controller {
 	
-	ActivityModel model;
-	ActivityView view = new ActivityView();
+	private ActivityModel model;
+	private ActivityView view = new ActivityView();
 	
 	public ActivityController(String courseId) {
 		model = new ActivityModel(courseId);
@@ -39,10 +39,10 @@ public class ActivityController extends Controller {
 				view.setCanViewCost(model.getViewCanViewCost());
 			}
 			else {
-				// TODO show 404 page.
+				error = true;
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			error = true;
 			e.printStackTrace();
 		}
 	}

@@ -71,18 +71,18 @@ public class Session {
 	}
 	
 	public View getCurrentView() {
-		if (currentController != null) {
+		if (currentController != null && !currentController.isError()) {
 			return currentController.getView();
 		}
-		// has already been shown or does not exist.
+		// has an error or does not exist.
 		return null;
 	}
 	
 	public View getMenuView() {
-		if (menuController != null) {
+		if (menuController != null && !menuController.isError()) {
 			return menuController.getView();
 		}
-		// has already been shown or does not exist.
+		// has an error or does not exist.
 		return null;
 	}
 	

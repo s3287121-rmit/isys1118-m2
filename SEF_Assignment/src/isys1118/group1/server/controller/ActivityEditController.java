@@ -33,6 +33,7 @@ public class ActivityEditController extends Controller {
 					setView();
 				}
 			} catch (Exception e) {
+				error = true;
 				e.printStackTrace();
 			}
 		}

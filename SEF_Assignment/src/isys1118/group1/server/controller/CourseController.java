@@ -1,9 +1,12 @@
 package isys1118.group1.server.controller;
 
+import java.io.IOException;
+
 import isys1118.group1.server.database.Database;
 import isys1118.group1.server.database.Row;
 import isys1118.group1.server.database.Table;
 import isys1118.group1.server.model.CourseModel;
+import isys1118.group1.shared.error.DatabaseException;
 import isys1118.group1.shared.view.CourseView;
 import isys1118.group1.shared.view.View;
 
@@ -24,6 +27,10 @@ public class CourseController extends Controller {
 			Row row = fullTable.getRowEquals("courseid", model.getCourseId());
 			if (row != null) {
 				model.setCourseFromRow(row);
+				if (model.getError()) {
+					error = true;
+					return;
+				}
 				view.setCourseId(model.getCourseId());
 				view.setTitle(model.getViewTitle());
 				view.setDescription(model.getViewDescription());
@@ -37,9 +44,10 @@ public class CourseController extends Controller {
 				view.setApprovalView(model.isApprovalView());
 			}
 			else {
-				// TODO show 404 page.
+				error = true;
 			}
-		} catch (Exception e) {
+		} catch (DatabaseException | IOException e) {
+			error = true;
 			e.printStackTrace();
 		}
 	}
